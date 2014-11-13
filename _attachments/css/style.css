@@ -6,3 +6,7 @@
 .scroll {
   height: 100%;
 }
+
+#questionbtns {
+  padding: 10px;
+}

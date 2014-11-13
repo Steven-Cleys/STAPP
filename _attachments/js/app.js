@@ -16,6 +16,11 @@ angular.module('stapp', ['ionic','stapp.controllers'])
       templateUrl: "templates/map.html",
       controller: 'MapCtrl'
   })
+  .state('login', {
+      url: "/login",
+      templateUrl: "templates/login.html",
+      controller: 'LoginCtrl'
+})
   .state('question', {
       url: "/question",
       templateUrl: "templates/question.html",

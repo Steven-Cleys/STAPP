@@ -1,6 +1,6 @@
-angular.module('stapp.controllers', [])
+var myApp = angular.module('stapp.controllers', [])
 
-.controller('MapCtrl', function($scope, $ionicLoading, $compile) {
+myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile) {
       function initialize() {
         var myLatlng = new google.maps.LatLng(51.21968667200008,4.4009229560000449); //to do, current coords
         
@@ -27,7 +27,19 @@ angular.module('stapp.controllers', [])
 
         $scope.map = map;
       }
+      
       initialize();
+      
+      function showspinner() {
+    	    $ionicLoading.show({
+    	      content: "whatever"
+    	    });
+    	  };
+    	  $scope.hide = function(){
+    	    $ionicLoading.hide();
+    	  };
+    	  
+    showspinner();
       
       $scope.centerOnMe = function() {
         if(!$scope.map) {
@@ -53,3 +65,39 @@ angular.module('stapp.controllers', [])
       
     });
 
+myApp.controller('QuestionCtrl', function($scope){
+	console.log("lalal");
+})
+
+myApp.controller('LoginCtrl', function($scope, $ionicModal, $timeout) {
+	  // Form data for the login modal
+	  $scope.loginData = {};
+
+	  // Create the login modal that we will use later
+	  $ionicModal.fromTemplateUrl('templates/login.html', {
+	    scope: $scope
+	  }).then(function(modal) {
+	    $scope.modal = modal;
+	  });
+
+	  // Triggered in the login modal to close it
+	  $scope.closeLogin = function() {
+	    $scope.modal.hide();
+	  };
+
+	  // Open the login modal
+	  $scope.login = function() {
+	    $scope.modal.show();
+	  };
+
+	  // Perform the login action when the user submits the login form
+	  $scope.doLogin = function() {
+	    console.log('Doing login', $scope.loginData);
+
+	    // Simulate a login delay. Remove this and replace with your login
+	    // code if using a login system
+	    $timeout(function() {
+	      $scope.closeLogin();
+	    }, 1000);
+	  };
+	})
