@@ -52,3 +52,4 @@ angular.module('stapp.controllers', [])
       };
       
     });
+

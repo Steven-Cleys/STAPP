@@ -8,10 +8,17 @@
 angular.module('stapp', ['ionic','stapp.controllers'])
 
 .config(function($stateProvider, $urlRouterProvider) {
+	$urlRouterProvider.otherwise('/index');
+	
   $stateProvider
   	.state('index', {
       url: "/index",
       templateUrl: "templates/map.html",
       controller: 'MapCtrl'
-  });
+  })
+  .state('question', {
+      url: "/question",
+      templateUrl: "templates/question.html",
+      controller: 'QuestionCtrl'     
+  })
 });
