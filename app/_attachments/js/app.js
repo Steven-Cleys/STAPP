@@ -26,4 +26,8 @@ angular.module('stapp', ['ionic','stapp.controllers'])
       templateUrl: "templates/question.html",
       controller: 'QuestionCtrl'     
   })
+  
+  
+  
+  
 });
