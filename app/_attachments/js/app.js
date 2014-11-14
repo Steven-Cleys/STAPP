@@ -21,14 +21,6 @@ angular.module('stapp', ['ionic','stapp.controllers'])
       templateUrl: "templates/login.html",
       controller: 'LoginCtrl'
 })
-
-
-
-
-
-
-
-
   .state('question', {
       url: "/question",
       templateUrl: "templates/question.html",
