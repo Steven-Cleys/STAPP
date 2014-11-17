@@ -36,12 +36,6 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile, $ionicPopu
 			onTap : $scope.doLogin
 		} ]
 	});
-
-	//					$scope.changeState = function()
-	//					{
-	//						//console.log("hallo ");
-	//						$state.go('question');
-	//					}
 	
 	$scope.doLogin = function() {
 		console.log('Doing login', $scope.loginData);
