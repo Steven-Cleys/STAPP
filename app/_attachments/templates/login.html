@@ -1,30 +1,21 @@
-<div class="modal">
-	<ion-header-bar class="bar bar-header bar-dark">
-	<b><h1 class="title">Log in</h1></b>
-	</ion-header-bar>
-	<ion-content>
-	<form action="#/index" ng-submit="closeLogin()">
-		<div class="list">
-			<label class="item item-input item-stacked-label"> <span
-				class="input-label">First Name</span> <input type="text"
-				placeholder="John">
-			</label> <label class="item item-input item-stacked-label"> <span
-				class="input-label">Last Name</span> <input type="text"
-				placeholder="Suhr">
-			</label> <label class="item item-input item-stacked-label"> <span
-				class="input-label">Email</span> <input type="text"
-				placeholder="john@suhr.com"></label>
-			<li class="item item-toggle">Group <label
-				class="toggle toggle-assertive"> <input type="checkbox">
-					<div class="track">
-						<div class="handle"></div>
-					</div>
-			</label>
-			</li> <label class="item" align="center">
-				<button class="button button-large button-block button-assertive" type="submit">Log
-					in</button>
-			</label>
-		</div>
-	</form>
-	</ion-content>
+
+
+<div class="list">
+	<label class="item item-input"> 
+		<span class="input-label">Name</span>
+		<input type="text" ng-model="loginData.name">
+	</label>
+	<label class="item item-input">
+		<span class="input-label">Email</span> 
+		<input type="text" ng-model="loginData.email">
+	</label>
+	<li class="item item-toggle">Group <label
+		class="toggle toggle-assertive"> <input type="checkbox">
+			<div class="track">
+				<div class="handle"></div>
+			</div>
+	</label>
+	</li>
 </div>
+
+

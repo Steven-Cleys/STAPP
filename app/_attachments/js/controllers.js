@@ -1,83 +1,98 @@
 var myApp = angular.module('stapp.controllers', [])
 
-myApp
-		.controller(
-				'MapCtrl',
-				function($scope, $ionicLoading, $compile, $state) {
-					function initialize() {
-						var myLatlng = new google.maps.LatLng(
-								51.21968667200008, 4.4009229560000449); // to
-						// do,
-						// current
-						// coords
+myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile, $ionicPopup) {
+	function initialize() {
+		var myLatlng = new google.maps.LatLng(51.21968667200008,
+				4.4009229560000449); // to
+		// do,
+		// current
+		// coords
 
-						var mapOptions = {
-							center : myLatlng,
-							zoom : 16,
-							mapTypeId : google.maps.MapTypeId.ROADMAP
-						};
-						var map = new google.maps.Map(document
-								.getElementById("map"), mapOptions);						
+		var mapOptions = {
+			center : myLatlng,
+			zoom : 16,
+			mapTypeId : google.maps.MapTypeId.ROADMAP
+		};
+		var map = new google.maps.Map(document.getElementById("map"),
+				mapOptions);
 
-//						google.maps.event.addListener(marker, 'click',
-//								function() {
-//									infowindow.open(map, marker);
-//								});
+		//						google.maps.event.addListener(marker, 'click',
+		//								function() {
+		//									infowindow.open(map, marker);
+		//								});
 
-						$scope.map = map;
-					}
-					
-					
+		$scope.map = map;
+	}
 
-					initialize();
+	initialize();
 
-					$scope.changeState = function()
-					{
-						//console.log("hallo ");
-						$state.go('question');
-					}
-					
+	var myPopup = $ionicPopup.show({
+		templateUrl : 'templates/login.html',
+		title : 'Login',
+		scope : $scope,
+		buttons : [ {
+			text : '<b>Login</b>',
+			type : 'button button-large button-block button-assertive',
+			onTap : $scope.doLogin
+		} ]
+	});
 
-					function showspinner() {
-						$ionicLoading.show({
-							content : "whatever"
-						});
-					}
-					;
-					$scope.hide = function() {
-						$ionicLoading.hide();
-					};
+	//					$scope.changeState = function()
+	//					{
+	//						//console.log("hallo ");
+	//						$state.go('question');
+	//					}
+	
+	$scope.doLogin = function() {
+		console.log('Doing login', $scope.loginData);
+		// Simulate a login delay. Remove this and replace with your login
+		// code if using a login system
+		$timeout(function() {
+			$scope.closeLogin();
+		}, 1000);
+	};
 
-					//showspinner();
+	function showspinner() {
+		$ionicLoading.show({
+			content : "whatever"
+		});
+	}
+	;
 
-//					$scope.centerOnMe = function() {
-//						if (!$scope.map) {
-//							return;
-//						}
-//
-//						$scope.loading = $ionicLoading.show({
-//							content : 'Getting current location...',
-//							showBackdrop : false
-//						});
-//
-//						navigator.geolocation.getCurrentPosition(
-//								function(pos) {
-//									$scope.map
-//											.setCenter(new google.maps.LatLng(
-//													pos.coords.latitude,
-//													pos.coords.longitude));
-//									$scope.loading.hide();
-//								}, function(error) {
-//									alert('Unable to get location: '
-//											+ error.message);
-//								});
-//					};
-//
-//					$scope.clickTest = function() {
-//						alert('Example of infowindow with ng-click')
-//					};
+	$scope.hide = function() {
+		$ionicLoading.hide();
+	};
 
-				});
+	//showspinner();
+
+	//					$scope.centerOnMe = function() {
+	//						if (!$scope.map) {
+	//							return;
+	//						}
+	//
+	//						$scope.loading = $ionicLoading.show({
+	//							content : 'Getting current location...',
+	//							showBackdrop : false
+	//						});
+	//
+	//						navigator.geolocation.getCurrentPosition(
+	//								function(pos) {
+	//									$scope.map
+	//											.setCenter(new google.maps.LatLng(
+	//													pos.coords.latitude,
+	//													pos.coords.longitude));
+	//									$scope.loading.hide();
+	//								}, function(error) {
+	//									alert('Unable to get location: '
+	//											+ error.message);
+	//								});
+	//					};
+	//
+	//					$scope.clickTest = function() {
+	//						alert('Example of infowindow with ng-click')
+	//					};
+
+});
 
 myApp.controller('QuestionCtrl', function($scope) {
 	console.log("lalal");
@@ -95,10 +110,10 @@ myApp.controller('LoginCtrl', function($scope, $ionicModal, $timeout) {
 	});
 
 	// Triggered in the login modal to close it
-	$scope.closeLogin = function() {
-		$scope.modal.hide();
-		// window.location.replace("/stapp/_design/app/index.html#/index");
-	};
+	//	$scope.closeLogin = function() {
+	//		$scope.modal.hide();
+	//		// window.location.replace("/stapp/_design/app/index.html#/index");
+	//	};
 
 	// Open the login modal
 	$scope.login = function() {
