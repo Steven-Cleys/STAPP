@@ -22,9 +22,23 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile, $ionicPopu
 		//								});
 
 		$scope.map = map;
+		
+		google.maps.event.addListenerOnce(map, 'tilesloaded', function(){
+			console.log("map loaded");
+			$ionicLoading.hide();
+		});
+		
+		
 	}
 
 	initialize();
+	showspinner();
+	
+	$scope.doLogin = function() {
+		console.log('Doing login', $scope.loginData);
+		// Simulate a login delay. Remove this and replace with your login
+		// code if using a login system
+	};
 
 	var myPopup = $ionicPopup.show({
 		templateUrl : 'templates/login.html',
@@ -36,26 +50,13 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile, $ionicPopu
 			onTap : $scope.doLogin
 		} ]
 	});
-	
-	$scope.doLogin = function() {
-		console.log('Doing login', $scope.loginData);
-		// Simulate a login delay. Remove this and replace with your login
-		// code if using a login system
-		$timeout(function() {
-			$scope.closeLogin();
-		}, 1000);
-	};
 
 	function showspinner() {
 		$ionicLoading.show({
-			content : "whatever"
+			template : '<i class="icon ion-loading-a"></i>',
 		});
-	}
-	;
-
-	$scope.hide = function() {
-		$ionicLoading.hide();
 	};
+	
 
 	//showspinner();
 
