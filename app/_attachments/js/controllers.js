@@ -1,7 +1,8 @@
 var myApp = angular.module('stapp.controllers', [])
 var myPopup;
 
-myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile, $ionicPopup) {
+myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,
+		$ionicPopup) {
 	function initialize() {
 		var myLatlng = new google.maps.LatLng(51.21968667200008,
 				4.4009229560000449); // to
@@ -23,16 +24,15 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile, $ionicPopu
 		//								});
 
 		$scope.map = map;
-		
-		google.maps.event.addListenerOnce(map, 'tilesloaded', function(){
+
+		google.maps.event.addListenerOnce(map, 'tilesloaded', function() {
 			setTimeout(function() {
 				$ionicLoading.hide();
-				},1250);
+			}, 1250);
 			console.log("map loaded");
-			
+
 		});
-		
-		
+
 	}
 
 	initialize();
@@ -48,10 +48,8 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile, $ionicPopu
 		$ionicLoading.show({
 			template : '<i class="icon ion-loading-a"></i>',
 		});
-	};
-	
-
-	
+	}
+	;
 
 	//showspinner();
 
@@ -95,7 +93,7 @@ myApp.controller('LoginCtrl', function($scope, $ionicPopup) {
 		console.log('Doing login', $scope.login);
 		// Simulate a login delay. Remove this and replace with your login
 		// code if using a login system
-		
+
 		myPopup.close();
 	};
 })
