@@ -1,4 +1,5 @@
 var myApp = angular.module('stapp.controllers', [])
+var myPopup;
 
 myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile, $ionicPopup) {
 	function initialize() {
@@ -37,7 +38,7 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile, $ionicPopu
 	initialize();
 	showspinner();
 
-	var myPopup = $ionicPopup.show({
+	myPopup = $ionicPopup.show({
 		templateUrl : 'templates/login.html',
 		title : 'Login',
 		scope : $scope
@@ -87,12 +88,14 @@ myApp.controller('QuestionCtrl', function($scope) {
 	console.log("lalal");
 })
 
-myApp.controller('LoginCtrl', function($scope) {
+myApp.controller('LoginCtrl', function($scope, $ionicPopup) {
 
 	// Perform the login action when the user submits the login form
 	$scope.doLogin = function() {
 		console.log('Doing login', $scope.login);
 		// Simulate a login delay. Remove this and replace with your login
 		// code if using a login system
+		
+		myPopup.close();
 	};
 })
