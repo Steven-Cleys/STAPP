@@ -1,4 +1,5 @@
-
+<div ng-controller="LoginCtrl">
+<form ng-submit="doLogin()">
 <div class="list">
 
 	<label class="checkbox"> <input type="radio" checked
@@ -11,10 +12,11 @@
 	</label> 
 	<br></br>
 	<label class="item item-input"> <span class="input-label">Name</span>
-		<input type="text" ng-model="loginData.name" placeholder="Name"> 
+		<input type="text" ng-model="login.name" placeholder="Name"> 
 	</label> <label class="item item-input"> <span class="input-label">Email</span>
-		<input type="text" ng-model="loginData.email" placeholder="Email">
+		<input type="text" ng-model="login.email" placeholder="Email">
 	</label>
+	<button class="button button-large button-block button-assertive" type="submit">Log in</button>
 </div>
-
-
+</form>
+</div>

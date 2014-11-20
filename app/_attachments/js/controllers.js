@@ -24,8 +24,11 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile, $ionicPopu
 		$scope.map = map;
 		
 		google.maps.event.addListenerOnce(map, 'tilesloaded', function(){
+			setTimeout(function() {
+				$ionicLoading.hide();
+				},1250);
 			console.log("map loaded");
-			$ionicLoading.hide();
+			
 		});
 		
 		
@@ -33,22 +36,11 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile, $ionicPopu
 
 	initialize();
 	showspinner();
-	
-	$scope.doLogin = function() {
-		console.log('Doing login', $scope.loginData);
-		// Simulate a login delay. Remove this and replace with your login
-		// code if using a login system
-	};
 
 	var myPopup = $ionicPopup.show({
 		templateUrl : 'templates/login.html',
 		title : 'Login',
-		scope : $scope,
-		buttons : [ {
-			text : '<b>Login</b>',
-			type : 'button button-large button-block button-assertive',
-			onTap : $scope.doLogin
-		} ]
+		scope : $scope
 	});
 
 	function showspinner() {
@@ -56,6 +48,8 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile, $ionicPopu
 			template : '<i class="icon ion-loading-a"></i>',
 		});
 	};
+	
+
 	
 
 	//showspinner();
@@ -93,35 +87,12 @@ myApp.controller('QuestionCtrl', function($scope) {
 	console.log("lalal");
 })
 
-myApp.controller('LoginCtrl', function($scope, $ionicModal, $timeout) {
-	// Form data for the login modal
-	$scope.loginData = {};
-
-	// Create the login modal that we will use later
-	$ionicModal.fromTemplateUrl('templates/login.html', {
-		scope : $scope
-	}).then(function(modal) {
-		$scope.modal = modal;
-	});
-
-	// Triggered in the login modal to close it
-	//	$scope.closeLogin = function() {
-	//		$scope.modal.hide();
-	//		// window.location.replace("/stapp/_design/app/index.html#/index");
-	//	};
-
-	// Open the login modal
-	$scope.login = function() {
-		$scope.modal.show();
-	};
+myApp.controller('LoginCtrl', function($scope) {
 
 	// Perform the login action when the user submits the login form
 	$scope.doLogin = function() {
-		console.log('Doing login', $scope.loginData);
+		console.log('Doing login', $scope.login);
 		// Simulate a login delay. Remove this and replace with your login
 		// code if using a login system
-		$timeout(function() {
-			$scope.closeLogin();
-		}, 1000);
 	};
 })
