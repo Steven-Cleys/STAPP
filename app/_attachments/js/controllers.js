@@ -37,16 +37,24 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,
 	initialize();
 	showspinner();
 	
+	if(localStorage.getItem('logins') != null)
+		{
+		console.log(localStorage.getItem('logins'));
+		}
+	else
+		{
+		console.log("its empty");
+		myPopup = $ionicPopup.show({
+			templateUrl : 'templates/login.html',
+			scope : $scope
+		});
+		}
+	
 //	var tmp = '';
 //	if (localStorage.getItem('logins') != null)
 //	tmp = JSON.parse(localStorage.getItem('logins'));
 	
-	console.log(localStorage.getItem('logins'));
-	
-	myPopup = $ionicPopup.show({
-		templateUrl : 'templates/login.html',
-		scope : $scope
-	});
+
 
 	function showspinner() {
 		$ionicLoading.show({
