@@ -4064,8 +4064,7 @@ a.subdued {
   -moz-flex-direction: row;
   -ms-flex-direction: row;
   flex-direction: row;
-  padding: 10px;
-  min-height: 65px; }
+  padding: 0px }
   .popup-buttons .button {
     -webkit-box-flex: 1;
     -webkit-flex: 1;

@@ -8,6 +8,15 @@
   height: 100%;
 }
 
+.popup-head { /* override from ionic css */
+  padding: 0px 0px;
+}
+
+.popup-buttons {
+	padding: 0px;
+	min-height: 0px;
+}
+
 #questionbtns {
 	
 	padding: 1em;

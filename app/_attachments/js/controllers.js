@@ -26,9 +26,8 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,
 		$scope.map = map;
 
 		google.maps.event.addListenerOnce(map, 'tilesloaded', function() {
-			setTimeout(function() {
 				$ionicLoading.hide();
-			}, 1250);
+
 			console.log("map loaded");
 
 		});
@@ -37,10 +36,15 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,
 
 	initialize();
 	showspinner();
-
+	
+//	var tmp = '';
+//	if (localStorage.getItem('logins') != null)
+//	tmp = JSON.parse(localStorage.getItem('logins'));
+	
+	console.log(localStorage.getItem('logins'));
+	
 	myPopup = $ionicPopup.show({
 		templateUrl : 'templates/login.html',
-		title : 'Login',
 		scope : $scope
 	});
 
@@ -83,7 +87,7 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,
 });
 
 myApp.controller('QuestionCtrl', function($scope) {
-	console.log("lalal");
+	//console.log("lalal");
 })
 
 myApp.controller('LoginCtrl', function($scope, $ionicPopup) {
@@ -93,6 +97,8 @@ myApp.controller('LoginCtrl', function($scope, $ionicPopup) {
 		console.log('Doing login', $scope.login);
 		// Simulate a login delay. Remove this and replace with your login
 		// code if using a login system
+		localStorage.setItem('logins', JSON.stringify($scope.login));
+
 
 		myPopup.close();
 	};
