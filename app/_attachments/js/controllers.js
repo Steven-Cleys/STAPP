@@ -49,12 +49,6 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,
 			scope : $scope
 		});
 		}
-	
-//	var tmp = '';
-//	if (localStorage.getItem('logins') != null)
-//	tmp = JSON.parse(localStorage.getItem('logins'));
-	
-
 
 	function showspinner() {
 		$ionicLoading.show({
