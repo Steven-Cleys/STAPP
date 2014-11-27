@@ -1,5 +1,23 @@
-var myApp = angular.module('stapp.controllers', [])
+var myApp = angular.module('stapp.controllers', ['ui.router'])
 var myPopup;
+var hotspots=[
+{naam:"Barbouf", adres:"Lange Nieuwstraat 7", lat:51.2200226, lon:4.4058538},
+{naam:"Panos", adres:"Meir 60", lat:51.2179238, lon:4.410221200000024},
+{naam:"Delhaize", adres:"Meir 78", lat:51.2180487, lon:4.411330599999928},
+{naam:"Bourla", adres:"Graanmarkt 7", lat:51.215989, lon:4.408375299999989},
+{naam:"Universitas", adres:"Prinsesstraat 16", lat:51.2218235, lon:4.410761900000011},
+{naam:"Campus AP Lange Nieuwstraat", adres:"Lange Nieuwstraat 101", lat:51.2194614, lon:4.411981700000069},
+{naam:"Mediamarkt ", adres:"De Keyserlei 58", lat:51.2174084, lon:4.419184399999949},
+{naam:"Centraal Station", adres:"/", lat:51.2160963, lon:4.421220700000049},
+{naam:"Radisson Hotel", adres:"Koningin Astridplein 14", lat:51.2187178, lon:4.421660999999972},
+{naam:"Barnini", adres:"Oudevaartplaats 10", lat:51.2149533, lon:4.4089493000000175}
+];
+
+function makeInfoWindowEvent(map, infowindow, marker) {  
+	   return function() {  
+	      infowindow.open(map, marker);
+	   };  
+	} 
 
 myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,$http,
 		$ionicPopup) {
@@ -18,10 +36,27 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,$http,
 		var map = new google.maps.Map(document.getElementById("map"),
 				mapOptions);
 
-		// google.maps.event.addListener(marker, 'click',
-		// function() {
-		// infowindow.open(map, marker);
-		// });
+		for (i = 0; i < hotspots.length; i++) { 
+			
+			
+			var spot= hotspots[i];
+			var myLatLng = new google.maps.LatLng(spot.lat,spot.lon);
+			 
+			
+			var marker = new google.maps.Marker({
+				map:map,
+			    position: myLatLng,
+			    title: spot.naam
+			});
+			var infowindow = new google.maps.InfoWindow({
+			      content: spot.naam + "<br>" + spot.adres
+			  });
+
+			marker.setMap(map);
+			google.maps.event.addListener(marker, 'click', makeInfoWindowEvent(map, infowindow, marker));
+			
+			
+		}
 
 		$scope.map = map;
 
@@ -109,13 +144,14 @@ myApp
 		.controller(
 				'QuestionCtrl',
 				function($scope, $ionicPopup, $state) {
+					
 					var qrcode = 3;
 					var question = {};
 					var arr = JSON.parse(window.localStorage['questions']);
+					console.log(arr);
 
 					for (var i = 0; i < arr.length; i++) {
-						if (arr[i].id.indexOf('_design') == -1) {
-							var doc = arr[i].doc;
+							var doc = arr[i].value;
 							if (qrcode == doc.qrCode) {
 								question.hotspot = doc.hotspot;
 								question.question = doc.question;
@@ -133,7 +169,6 @@ myApp
 								}
 								question.answer = doc.answer
 							}
-						}
 					}
 					$scope.question = [ {
 						"question" : question.question
@@ -161,24 +196,22 @@ myApp
 						if (answer != null) {
 							if (answer == question.answer) {
 								ok = ok + ";" + qrcode;
-								alertPopup = $ionicPopup.alert({
-									title : 'Correct!',
-									buttons : [ {
-										text : 'OK',
-										type : 'button-assertive'
-									} ]
-								});
-							} else {
-								nok = nok + ";" + qrcode;
-								alertPopup = $ionicPopup.alert({
-									title : 'U heeft fout gantwoord.',
-									buttons : [ {
-										text : 'OK',
-										type : 'button-assertive'
-									} ]
-								});
 							}
-						} else {
+							else
+							{
+								nok = nok + ";" + qrcode;
+							}
+								alertPopup = $ionicPopup.alert({
+									title : 'U antwoord is opgeslagen!',
+									buttons : [ {
+										text : 'OK',
+										type : 'button-assertive',
+										onTap: function() {
+											$state.go('index');}
+									} ]
+								});
+							} 
+						else {
 							if (question.allAnswers != null) {
 								alertPopup = $ionicPopup
 										.alert({
