@@ -12,6 +12,7 @@ var hotspots=[
 {naam:"Radisson Hotel", adres:"Koningin Astridplein 14", lat:51.2187178, lon:4.421660999999972},
 {naam:"Barnini", adres:"Oudevaartplaats 10", lat:51.2149533, lon:4.4089493000000175}
 ];
+var qrcode = 1;
 
 function makeInfoWindowEvent(map, infowindow, marker) {  
 	   return function() {  
@@ -145,7 +146,7 @@ myApp
 				'QuestionCtrl',
 				function($scope, $ionicPopup, $state) {
 					
-					var qrcode = 3;
+					
 					var question = {};
 					var arr = JSON.parse(window.localStorage['questions']);
 					console.log(arr);
@@ -236,6 +237,13 @@ myApp
 						window.localStorage['questionNok'] = nok;
 						console.log(window.localStorage['questionOk']);
 						console.log(window.localStorage['questionNok']);
+						
+						console.log("qrcode: " + qrcode);
+						qrcode += 1; // has to be removed, temp code!
+						if (qrcode > 11)
+							{
+							qrcode = 1;
+							}
 					}
 				})
 
