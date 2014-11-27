@@ -1,23 +1,30 @@
-<ion-view title="Question">
-  <ion-content>
-  <div id="questionbtns">
-    <b><h1><center>Which mountain is the highest in the world?</center></h1></b>
-    
-    <img src="http://www.w3schools.com/html/pic_mountain.jpg" alt="Mountain View"  style="margin:0px auto;display:block;width:100%;">
-   
-
-  	<button class="button button-large button-block button-assertive">
-  <b>Kilimanjaro</b>
-</button>
-  	<button class="button button-large button-block button-assertive">
-  <b>Mount McKinley</b>
-</button>
-  	<button class="button button-large button-block button-assertive">
-  <b>Mount Everest</b>
-</button>
-  	<button class="button button-large button-block button-assertive">
-  <b>Mount Logan</b>
-</button>
-</div>
-</ion-content>
-</ion-view>
+<html ng-app="stapp.controls">
+ <body class="item-content" ng-controller="QuestionCtrl">
+  <ion-view id="question" title="Question">
+   <ion-content id="questionbtns">
+    <ion-list>
+     <h2 ng-repeat="item in hotspot" align="center">Hotspot: {{ item.hotspot }}</h2>
+     <br/>
+     
+     <h4 ng-repeat="item in question" align="center">{{ item.question }}</h4>
+     <br/>
+     
+     <p id="multi">
+     <ion-radio ng-repeat="item in answer" ng-value="item.items" ng-model="validate.answer">{{ item.items }}</ion-radio>
+     <!-- <button ng-repeat="item in answer" ng-click="validate()" ng-value="item.items" ng-model="validate.answer" class="button button-block button-assertive">
+      {{ item.items }}
+     </button> -->
+     </p>
+     
+     <p id="open">
+     <label class="item item-input"> <span class="input-label">Antwoord: </span>
+     <input type="text" ng-model="validate.answer" placeholder="Name" required> 
+     </label>
+     </p>
+     
+     <button class="button button-large button-block button-assertive" ng-click="validate()">Bevestig uw antwoord</button>
+    </ion-list>
+   </ion-content>
+  </ion-view>
+ </body>
+</html>
