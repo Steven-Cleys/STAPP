@@ -119,7 +119,7 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,$http,
 	// alert('Example of infowindow with ng-click')
 	// };
 	function loadQuestions() {
-		$http.jsonp('http://pedlianderserourtaniedsc:XyFWhFRUkHaSb5S75cBQ0R73@stapp.cloudant.com/ap/_design/views/_view/questions?callback=JSON_CALLBACK') 
+		$http.jsonp('http://ainceentandstarterspaint:Vx6CMoTi6Somiqug6resIANt@stapp.cloudant.com/ap/_design/views/_view/questions?callback=JSON_CALLBACK') 
 				.then( 
 						function(resp) {
 							console.log(resp);
