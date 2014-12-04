@@ -24,6 +24,30 @@ function makeInfoWindowEvent(map, infowindow, marker) {
 
 myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,$http,
 		$ionicPopup) {
+	
+	function loadQuestions() {
+		$http.jsonp('http://stapp.cloudant.com/ap/_design/views/_view/questions?callback=JSON_CALLBACK') 
+				.then( 
+						function(resp) {
+							console.log(resp);
+							window.localStorage['questions'] = JSON
+									.stringify(resp.data.rows);
+						}, function(err) {
+							console.error('ERR', err);
+							console.log(err.status);
+						})
+		if (window.localStorage['questions'] != null) {
+			console.log("questions loaded");
+		} else {
+			console.log("questions not loaded");
+		}
+
+		window.localStorage['questionOk'] = "0";
+		window.localStorage['questionNok'] = "0";
+	}
+	loadQuestions();
+	
+	
 	function initialize() {
 		var myLatlng = new google.maps.LatLng(51.21968667200008,
 				4.4009229560000449); // to
@@ -120,27 +144,7 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,$http,
 	// $scope.clickTest = function() {
 	// alert('Example of infowindow with ng-click')
 	// };
-	function loadQuestions() {
-		$http.jsonp('http://stapp.cloudant.com/ap/_design/views/_view/questions?callback=JSON_CALLBACK') 
-				.then( 
-						function(resp) {
-							console.log(resp);
-							window.localStorage['questions'] = JSON
-									.stringify(resp.data.rows);
-						}, function(err) {
-							console.error('ERR', err);
-							console.log(err.status);
-						})
-		if (window.localStorage['questions'] != null) {
-			console.log("questions loaded");
-		} else {
-			console.log("questions not loaded");
-		}
-
-		window.localStorage['questionOk'] = "0";
-		window.localStorage['questionNok'] = "0";
-	}
-	loadQuestions();
+	
 });
 
 myApp
