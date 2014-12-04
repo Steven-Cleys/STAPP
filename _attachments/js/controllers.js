@@ -1,4 +1,4 @@
-var myApp = angular.module('stapp.controllers', ['ui.router'])
+var myApp = angular.module('stapp.controllers', ['ui.router', 'ngCordova'])
 var myPopup;
 var hotspots=[
 {naam:"Barbouf", adres:"Lange Nieuwstraat 7", lat:51.2200226, lon:4.4058538},
@@ -247,6 +247,12 @@ myApp
 							qrcode = 1;
 							}
 					}
+					
+					$scope.changeState = function()
+						{
+							//console.log("hallo ");
+							$state.go('question');
+						}
 				})
 
 myApp.controller('LoginCtrl', function($scope, $ionicPopup) {
@@ -262,7 +268,7 @@ myApp.controller('LoginCtrl', function($scope, $ionicPopup) {
 	};
 })
 
-myApp.controller("ExampleController", function($scope, $cordovaBarcodeScanner) {
+myApp.controller("BarcodeController", function($scope, $cordovaBarcodeScanner) {
 
 	$scope.scanBarcode = function() {
 		$cordovaBarcodeScanner.scan().then(function(imageData) {
