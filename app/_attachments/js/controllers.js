@@ -1,4 +1,4 @@
-var myApp = angular.module('stapp.controllers', ['ui.router', 'ngCordova'])
+var myApp = angular.module('stapp.controllers', ['ui.router', 'ngCordova', 'ionic'])
 var myPopup;
 var hotspots=[
 {naam:"Barbouf", adres:"Lange Nieuwstraat 7", lat:51.2200226, lon:4.4058538},
@@ -23,7 +23,7 @@ function makeInfoWindowEvent(map, infowindow, marker) {
 	} 
 
 myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,$http,
-		$ionicPopup) {
+		$ionicPopup,$cordovaBarcodeScanner) {
 	function initialize() {
 		var myLatlng = new google.maps.LatLng(51.21968667200008,
 				4.4009229560000449); // to
@@ -91,6 +91,16 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,$http,
 		});
 	}
 	;
+	
+	$scope.scanBarcode = function() {
+		$cordovaBarcodeScanner.scan().then(function(imageData) {
+			alert(imageData.text);
+			console.log("Barcode Format -> " + imageData.format);
+			console.log("Cancelled -> " + imageData.cancelled);
+		}, function(error) {
+			console.log("An error happened -> " + error);
+		});
+	};
 
 	// showspinner();
 
@@ -146,7 +156,7 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,$http,
 myApp
 		.controller(
 				'QuestionCtrl',
-				function($scope, $ionicPopup, $state,$cordovaBarcodeScanner) {
+				function($scope, $ionicPopup, $state) {
 					
 					
 					var question = {};
@@ -254,15 +264,8 @@ myApp
 							$state.go('question');
 							
 						}
-					$scope.scanBarcode = function() {
-						$cordovaBarcodeScanner.scan().then(function(imageData) {
-							alert(imageData.text);
-							console.log("Barcode Format -> " + imageData.format);
-							console.log("Cancelled -> " + imageData.cancelled);
-						}, function(error) {
-							console.log("An error happened -> " + error);
-						});
-					};
+					
+					
 				})
 
 myApp.controller('LoginCtrl', function($scope, $ionicPopup) {
@@ -278,16 +281,3 @@ myApp.controller('LoginCtrl', function($scope, $ionicPopup) {
 	};
 })
 
-myApp.controller("BarcodeController", function($scope, $cordovaBarcodeScanner) {
-
-	$scope.scanBarcode = function() {
-		$cordovaBarcodeScanner.scan().then(function(imageData) {
-			alert(imageData.text);
-			console.log("Barcode Format -> " + imageData.format);
-			console.log("Cancelled -> " + imageData.cancelled);
-		}, function(error) {
-			console.log("An error happened -> " + error);
-		});
-	};
-
-});
