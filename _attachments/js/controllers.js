@@ -12,6 +12,8 @@ var hotspots=[
 {naam:"Radisson Hotel", adres:"Koningin Astridplein 14", lat:51.2187178, lon:4.421660999999972},
 {naam:"Barnini", adres:"Oudevaartplaats 10", lat:51.2149533, lon:4.4089493000000175}
 ];
+
+// steven is een loser
 var qrcode = 1;
 
 function makeInfoWindowEvent(map, infowindow, marker) {  
