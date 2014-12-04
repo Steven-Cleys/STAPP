@@ -1,4 +1,4 @@
-var myApp = angular.module('stapp.controllers', ['ui.router', 'ngCordova'])
+var myApp = angular.module('stapp.controllers', ['ui.router','ionic', 'ngCordova'])
 var myPopup;
 var hotspots=[
 {naam:"Barbouf", adres:"Lange Nieuwstraat 7", lat:51.2200226, lon:4.4058538},
@@ -120,6 +120,17 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,$http,
 	// $scope.clickTest = function() {
 	// alert('Example of infowindow with ng-click')
 	// };
+	$scope.scanBarcode = function() {
+//		$cordovaBarcodeScanner.scan().then(function(imageData) {
+//			alert(imageData.text);
+//			console.log("Barcode Format -> " + imageData.format);
+//			console.log("Cancelled -> " + imageData.cancelled);
+//		}, function(error) {
+//			console.log("An error happened -> " + error);
+//		});
+		console.log("barcode");
+	};
+	
 	function loadQuestions() {
 		$http.jsonp('http://stapp.cloudant.com/ap/_design/views/_view/questions?callback=JSON_CALLBACK') 
 				.then( 
@@ -254,15 +265,7 @@ myApp
 							$state.go('question');
 							
 						}
-					$scope.scanBarcode = function() {
-						$cordovaBarcodeScanner.scan().then(function(imageData) {
-							alert(imageData.text);
-							console.log("Barcode Format -> " + imageData.format);
-							console.log("Cancelled -> " + imageData.cancelled);
-						}, function(error) {
-							console.log("An error happened -> " + error);
-						});
-					};
+
 				})
 
 myApp.controller('LoginCtrl', function($scope, $ionicPopup) {
