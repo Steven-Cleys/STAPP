@@ -121,6 +121,7 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,$http,
 	// alert('Example of infowindow with ng-click')
 	// };
 	function loadQuestions() {
+		
 		$http.jsonp('http://stapp.cloudant.com/ap/_design/views/_view/questions?callback=JSON_CALLBACK') 
 				.then( 
 						function(resp) {
