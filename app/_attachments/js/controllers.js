@@ -14,7 +14,7 @@ var hotspots=[
 ];
 
 // steven is een loser
-var qrcode = 1;
+var qrcode;
 
 function makeInfoWindowEvent(map, infowindow, marker) {  
 	   return function() {  
@@ -23,7 +23,7 @@ function makeInfoWindowEvent(map, infowindow, marker) {
 	} 
 
 myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,$http,
-		$ionicPopup,$cordovaBarcodeScanner) {
+		$ionicPopup,$cordovaBarcodeScanner, $state) {
 	function initialize() {
 		var myLatlng = new google.maps.LatLng(51.21968667200008,
 				4.4009229560000449); // to
@@ -94,7 +94,8 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,$http,
 	
 	$scope.scanBarcode = function() {
 		$cordovaBarcodeScanner.scan().then(function(imageData) {
-			alert(imageData.text);
+			qrcode = imageData.text;
+			$state.go('question');
 			console.log("Barcode Format -> " + imageData.format);
 			console.log("Cancelled -> " + imageData.cancelled);
 		}, function(error) {
