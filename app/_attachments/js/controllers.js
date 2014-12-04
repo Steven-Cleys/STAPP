@@ -1,4 +1,4 @@
-var myApp = angular.module('stapp.controllers', ['ui.router'])
+var myApp = angular.module('stapp.controllers', ['ui.router', 'ngCordova'])
 var myPopup;
 var hotspots=[
 {naam:"Barbouf", adres:"Lange Nieuwstraat 7", lat:51.2200226, lon:4.4058538},
@@ -12,6 +12,8 @@ var hotspots=[
 {naam:"Radisson Hotel", adres:"Koningin Astridplein 14", lat:51.2187178, lon:4.421660999999972},
 {naam:"Barnini", adres:"Oudevaartplaats 10", lat:51.2149533, lon:4.4089493000000175}
 ];
+
+// steven is een loser
 var qrcode = 1;
 
 function makeInfoWindowEvent(map, infowindow, marker) {  
@@ -119,11 +121,7 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,$http,
 	// alert('Example of infowindow with ng-click')
 	// };
 	function loadQuestions() {
-<<<<<<< HEAD
 		$http.jsonp('http://stapp.cloudant.com/ap/_design/views/_view/questions?callback=JSON_CALLBACK') 
-=======
-		$http.jsonp('http://pedlianderserourtaniedsc:XyFWhFRUkHaSb5S75cBQ0R73@stapp.cloudant.com/ap/_design/views/_view/questions?callback=JSON_CALLBACK') 
->>>>>>> parent of 8a49915... lol
 				.then( 
 						function(resp) {
 							console.log(resp);
@@ -148,7 +146,7 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,$http,
 myApp
 		.controller(
 				'QuestionCtrl',
-				function($scope, $ionicPopup, $state) {
+				function($scope, $ionicPopup, $state,$cordovaBarcodeScanner) {
 					
 					
 					var question = {};
@@ -249,6 +247,22 @@ myApp
 							qrcode = 1;
 							}
 					}
+					
+					$scope.changeState = function()
+						{
+							//console.log("hallo ");
+							$state.go('question');
+							
+						}
+					$scope.scanBarcode = function() {
+						$cordovaBarcodeScanner.scan().then(function(imageData) {
+							alert(imageData.text);
+							console.log("Barcode Format -> " + imageData.format);
+							console.log("Cancelled -> " + imageData.cancelled);
+						}, function(error) {
+							console.log("An error happened -> " + error);
+						});
+					};
 				})
 
 myApp.controller('LoginCtrl', function($scope, $ionicPopup) {
@@ -264,7 +278,7 @@ myApp.controller('LoginCtrl', function($scope, $ionicPopup) {
 	};
 })
 
-myApp.controller("ExampleController", function($scope, $cordovaBarcodeScanner) {
+myApp.controller("BarcodeController", function($scope, $cordovaBarcodeScanner) {
 
 	$scope.scanBarcode = function() {
 		$cordovaBarcodeScanner.scan().then(function(imageData) {
