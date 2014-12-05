@@ -57,8 +57,7 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,$http,
 
 			marker.setMap(map);
 			google.maps.event.addListener(marker, 'click', makeInfoWindowEvent(map, infowindow, marker));
-			
-			
+
 		}
 
 		$scope.map = map;
