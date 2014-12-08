@@ -147,14 +147,13 @@ myApp
 												}
 
 												if (found == false) {
-													var alertPopup = $ionicPopup
+													var alertPopup;
+													alertPopup = $ionicPopup
 															.alert({
 																title : 'Ongeldige QR-Code',
 																buttons : [ {
 																	text : imageData.text,
-																	type : 'button-assertive',
-																	onTap : function() {
-																		alertPopup.close();
+																	type : 'button-assertive'
 																	}
 																} ]
 															});
