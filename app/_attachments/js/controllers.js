@@ -45,66 +45,64 @@ myApp
 					// }
 
 					function initialize() {
-							if (window.localStorage['questions'] == null) {
-								setTimeout(function() {
-									initialize();
-								}, 200);
-							} else {
-								// go do that thing
+						if (window.localStorage['questions'] == null) {
+							setTimeout(function() {
+								initialize();
+							}, 200);
+						} else {
+							// go do that thing
 
-								var myLatlng = new google.maps.LatLng(
-										51.21968667200008, 4.4009229560000449); // to
-								// do,
-								// current
-								// coords
+							var myLatlng = new google.maps.LatLng(
+									51.21968667200008, 4.4009229560000449); // to
+							// do,
+							// current
+							// coords
 
-								var mapOptions = {
-									center : myLatlng,
-									zoom : 16,
-									mapTypeId : google.maps.MapTypeId.ROADMAP
-								};
-								var map = new google.maps.Map(document
-										.getElementById("map"), mapOptions);
+							var mapOptions = {
+								center : myLatlng,
+								zoom : 16,
+								mapTypeId : google.maps.MapTypeId.ROADMAP
+							};
+							var map = new google.maps.Map(document
+									.getElementById("map"), mapOptions);
 
-								jsonarr = JSON
-										.parse(window.localStorage['questions']);
-								for (i = 0; i < jsonarr.length; i++) {
+							jsonarr = JSON
+									.parse(window.localStorage['questions']);
+							for (i = 0; i < jsonarr.length; i++) {
 
-									var spot = jsonarr[i];
-									var myLatLng = new google.maps.LatLng(
-											spot.value.lat, spot.value.lon);
+								var spot = jsonarr[i];
+								var myLatLng = new google.maps.LatLng(
+										spot.value.lat, spot.value.lon);
 
-									var marker = new google.maps.Marker({
-										map : map,
-										position : myLatLng,
-										title : spot.value.hotspot
-									});
-									var infowindow = new google.maps.InfoWindow(
-											{
-												content : spot.value.hotspot
-														+ "<br>"
-														+ spot.value.adres
-											});
-									console.log(spot.value.adres);
-									marker.setMap(map);
-									google.maps.event.addListener(marker,
-											'click', makeInfoWindowEvent(map,
-													infowindow, marker));
+								var marker = new google.maps.Marker({
+									map : map,
+									position : myLatLng,
+									title : spot.value.hotspot
+								});
+								var infowindow = new google.maps.InfoWindow({
+									content : spot.value.hotspot + "<br>"
+											+ spot.value.adres
+								});
+								console.log(spot.value.adres);
+								marker.setMap(map);
+								google.maps.event.addListener(marker, 'click',
+										makeInfoWindowEvent(map, infowindow,
+												marker));
 
-								}
-
-								$scope.map = map;
-
-								google.maps.event.addListenerOnce(map,
-										'tilesloaded', function() {
-											$ionicLoading.hide();
-
-											console.log("map loaded");
-
-										});
 							}
-							;
-						
+
+							$scope.map = map;
+
+							google.maps.event.addListenerOnce(map,
+									'tilesloaded', function() {
+										$ionicLoading.hide();
+
+										console.log("map loaded");
+
+									});
+						}
+						;
+
 					}
 
 					initialize();
@@ -123,48 +121,51 @@ myApp
 					function showspinner() {
 						$ionicLoading.show({
 							templateUrl : 'templates/loading.html',
-							duration: 3000
+							duration : 3000
 						});
 					}
 					;
 
 					$scope.scanBarcode = function() {
 						var found = false;
-						$cordovaBarcodeScanner.scan().then(
-								function(imageData) {
-									for (i = 0; i < jsonarr.length; i++) {
-										if (imageData == jsonarr[i].value.qrCode)
-											{
-											qrcode = imageData.text;
-											$state.go('question');
-											console.log("Barcode Format -> "
-													+ imageData.format);
-											console.log("Cancelled -> "
-													+ imageData.cancelled);
-											found = true;
-											break;
-											}
-									}
-									if (found == false)
-										{
-										var alertPopup = $ionicPopup.alert({
-											title : 'Ongeldige QR-Code',
-											buttons : [ {
-												text : 'Opniew',
-												type : 'button-assertive',
-												onTap : function() {
-													$scope.scanBarcode;
+						$cordovaBarcodeScanner
+								.scan()
+								.then(
+										function(imageData) {
+											for (i = 0; i < jsonarr.length; i++) {
+												if (imageData == jsonarr[i].value.qrCode) {
+													qrcode = imageData.text;
+													$state.go('question');
+													console
+															.log("Barcode Format -> "
+																	+ imageData.format);
+													console
+															.log("Cancelled -> "
+																	+ imageData.cancelled);
+													found = true;
+													break;
 												}
-											} ]
-										});
-										}
-									
-								},
-								function(error) {
-									console
-											.log("An error happened -> "
+
+												if (found == false) {
+													var alertPopup = $ionicPopup
+															.alert({
+																title : 'Ongeldige QR-Code',
+																buttons : [ {
+																	text : imageData,
+																	type : 'button-assertive',
+																	onTap : function() {
+																		$scope.scanBarcode;
+																	}
+																} ]
+															});
+												}
+											}
+
+										},
+										function(error) {
+											console.log("An error happened -> "
 													+ error);
-								});
+										});
 					};
 
 					// showspinner();
