@@ -13,7 +13,7 @@ angular.module('stapp', ['ionic','stapp.controllers', 'ngCordova'])
   $stateProvider
   	.state('index', {
       url: "/index",
-      templateUrl: "template/loading.html",templateUrl:"templates/map.html",
+      templateUrl: "templates/map.html",
       controller: 'MapCtrl'
   })
   .state('question', {
