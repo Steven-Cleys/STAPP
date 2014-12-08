@@ -149,16 +149,8 @@ myApp
 													found = true;
 													break;
 												}
-												
-												alertPopup = $ionicPopup.alert({
-													title : 'Gelieve een antwoord in te vullen.',
-													buttons : [ {
-														text : 'OK',
-														type : 'button-assertive'
-													} ]
-												});
 
-												if (found == false) {
+												if (found == false && i>8) {
 													var alertPopup;
 													alertPopup = $ionicPopup
 															.alert({
@@ -167,10 +159,11 @@ myApp
 																	text : imageData.text,
 																	type : 'button-assertive'
 																	}
-																]
+																 ]
 															});
-												}
 											}
+											}
+
 										},
 										function(error) {
 											console.log("An error happened -> "
