@@ -39,7 +39,7 @@ myApp
 						window.localStorage['questionNok'] = "0";
 
 					}
-
+					showspinner();
 					// if (window.localStorage['questions'] == null) {
 					loadQuestions();
 					// }
@@ -104,9 +104,9 @@ myApp
 						;
 
 					}
-
+					
 					initialize();
-					showspinner();
+					
 
 					if (localStorage.getItem('logins') != null) {
 						console.log(localStorage.getItem('logins'));
