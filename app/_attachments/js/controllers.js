@@ -2,7 +2,7 @@ var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
 		'ionic' ])
 var myPopup;
 var qrcode;
-var jsonarr = [];
+var jsonarr = []; //array voor data bij te houden
 
 function makeInfoWindowEvent(map, infowindow, marker) {
 	return function() {
@@ -133,7 +133,7 @@ myApp
 								.then(
 										function(imageData) {
 											for (i = 0; i < jsonarr.length; i++) {
-												if (imageData == jsonarr[i].value.qrCode) {
+												if (imageData.text == jsonarr[i].value.qrCode) {
 													qrcode = imageData.text;
 													$state.go('question');
 													console
@@ -151,7 +151,7 @@ myApp
 															.alert({
 																title : 'Ongeldige QR-Code',
 																buttons : [ {
-																	text : imageData,
+																	text : imageData.text,
 																	type : 'button-assertive',
 																	onTap : function() {
 																		$scope.scanBarcode;
@@ -286,12 +286,6 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 		window.localStorage['questionNok'] = nok;
 		console.log(window.localStorage['questionOk']);
 		console.log(window.localStorage['questionNok']);
-
-		console.log("qrcode: " + qrcode);
-		qrcode += 1; // has to be removed, temp code!
-		if (qrcode > 11) {
-			qrcode = 1;
-		}
 	}
 
 	$scope.changeState = function() {
