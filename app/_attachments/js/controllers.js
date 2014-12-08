@@ -154,7 +154,7 @@ myApp
 																	text : imageData.text,
 																	type : 'button-assertive',
 																	onTap : function() {
-																		$scope.scanBarcode;
+																		alertPopup.close();
 																	}
 																} ]
 															});
