@@ -13,7 +13,6 @@ var hotspots=[
 {naam:"Barnini", adres:"Oudevaartplaats 10", lat:51.2149533, lon:4.4089493000000175}
 ];
 
-// steven is een loser
 var qrcode;
 
 function makeInfoWindowEvent(map, infowindow, marker) {  
