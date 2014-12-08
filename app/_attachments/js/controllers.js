@@ -40,6 +40,7 @@ myApp
 
 					}
 					
+					showspinner();
 					
 					// if (window.localStorage['questions'] == null) {
 					loadQuestions();
@@ -107,7 +108,7 @@ myApp
 						;
 
 					}
-					showspinner();
+					
 					initialize();
 					
 
