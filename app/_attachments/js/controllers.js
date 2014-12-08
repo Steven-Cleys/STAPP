@@ -39,12 +39,14 @@ myApp
 						window.localStorage['questionNok'] = "0";
 
 					}
-					showspinner();
+					
+					
 					// if (window.localStorage['questions'] == null) {
 					loadQuestions();
 					// }
 
 					function initialize() {
+						
 						if (window.localStorage['questions'] == null) {
 							setTimeout(function() {
 								initialize();
@@ -63,6 +65,7 @@ myApp
 								zoom : 16,
 								mapTypeId : google.maps.MapTypeId.ROADMAP
 							};
+
 							var map = new google.maps.Map(document
 									.getElementById("map"), mapOptions);
 
@@ -90,7 +93,7 @@ myApp
 												marker));
 
 							}
-
+							
 							$scope.map = map;
 
 							google.maps.event.addListenerOnce(map,
@@ -104,7 +107,7 @@ myApp
 						;
 
 					}
-					
+					showspinner();
 					initialize();
 					
 
