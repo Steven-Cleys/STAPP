@@ -2,6 +2,7 @@ var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
 		'ionic' ])
 var myPopup;
 var qrcode;
+var jsonarr = [];
 
 function makeInfoWindowEvent(map, infowindow, marker) {
 	return function() {
@@ -65,11 +66,11 @@ myApp
 								var map = new google.maps.Map(document
 										.getElementById("map"), mapOptions);
 
-								var arr = JSON
+								jsonarr = JSON
 										.parse(window.localStorage['questions']);
-								for (i = 0; i < arr.length; i++) {
+								for (i = 0; i < jsonarr.length; i++) {
 
-									var spot = arr[i];
+									var spot = jsonarr[i];
 									var myLatLng = new google.maps.LatLng(
 											spot.value.lat, spot.value.lon);
 
@@ -128,14 +129,36 @@ myApp
 					;
 
 					$scope.scanBarcode = function() {
+						var found = false;
 						$cordovaBarcodeScanner.scan().then(
 								function(imageData) {
-									qrcode = imageData.text;
-									$state.go('question');
-									console.log("Barcode Format -> "
-											+ imageData.format);
-									console.log("Cancelled -> "
-											+ imageData.cancelled);
+									for (i = 0; i < jsonarr.length; i++) {
+										if (imageData == jsonarr[i].value.qrCode)
+											{
+											qrcode = imageData.text;
+											$state.go('question');
+											console.log("Barcode Format -> "
+													+ imageData.format);
+											console.log("Cancelled -> "
+													+ imageData.cancelled);
+											found = true;
+											break;
+											}
+									}
+									if (found == false)
+										{
+										var alertPopup = $ionicPopup.alert({
+											title : 'Ongeldige QR-Code',
+											buttons : [ {
+												text : 'Opniew',
+												type : 'button-assertive',
+												onTap : function() {
+													$scope.scanBarcode;
+												}
+											} ]
+										});
+										}
+									
 								},
 								function(error) {
 									console
@@ -178,11 +201,10 @@ myApp
 myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 
 	var question = {};
-	var arr = JSON.parse(window.localStorage['questions']);
-	console.log(arr);
+	jsonarr = JSON.parse(window.localStorage['questions']);
 
-	for (var i = 0; i < arr.length; i++) {
-		var doc = arr[i].value;
+	for (var i = 0; i < jsonarr.length; i++) {
+		var doc = jsonarr[i].value;
 		if (qrcode == doc.qrCode) {
 			question.hotspot = doc.hotspot;
 			question.question = doc.question;
