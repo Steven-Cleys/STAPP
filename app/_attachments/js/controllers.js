@@ -23,6 +23,32 @@ function makeInfoWindowEvent(map, infowindow, marker) {
 
 myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,$http,
 		$ionicPopup,$cordovaBarcodeScanner, $state) {
+	
+	function loadQuestions() {
+		$http.jsonp('http://stapp.cloudant.com/ap/_design/views/_view/questions?callback=JSON_CALLBACK') 
+				.then( 
+						function(resp) {
+							console.log(resp);
+							window.localStorage['questions'] = JSON
+									.stringify(resp.data.rows);
+						}, function(err) {
+							console.error('ERR', err);
+							console.log(err.status);
+						})
+		if (window.localStorage['questions'] != null) {
+			console.log("questions loaded");
+		} else {
+			console.log("questions not loaded");
+		}
+
+		window.localStorage['questionOk'] = "0";
+		window.localStorage['questionNok'] = "0";
+	}
+	
+	if (window.localStorage['questions'] == null) {
+	loadQuestions();
+	}
+	
 	function initialize() {
 		var myLatlng = new google.maps.LatLng(51.21968667200008,
 				4.4009229560000449); // to
@@ -38,20 +64,22 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,$http,
 		var map = new google.maps.Map(document.getElementById("map"),
 				mapOptions);
 
-		for (i = 0; i < hotspots.length; i++) { 
+		var arr = JSON.parse(window.localStorage['questions']);
+		for (i = 0; i < arr.length; i++) { 
 			
 			
-			var spot= hotspots[i];
-			var myLatLng = new google.maps.LatLng(spot.lat,spot.lon);
+			var spot= arr[i];
+			console.log(spot);
+			var myLatLng = new google.maps.LatLng(spot.value.lat,spot.value.lon);
 			 
 			
 			var marker = new google.maps.Marker({
 				map:map,
 			    position: myLatLng,
-			    title: spot.naam
+			    title: spot.value.hotspot
 			});
 			var infowindow = new google.maps.InfoWindow({
-			      content: spot.naam + "<br>" + spot.adres
+			      content: spot.value.hotspot + "<br>" + spot.adres
 			  });
 
 			marker.setMap(map);
@@ -129,27 +157,7 @@ myApp.controller('MapCtrl', function($scope, $ionicLoading, $compile,$http,
 	// $scope.clickTest = function() {
 	// alert('Example of infowindow with ng-click')
 	// };
-	function loadQuestions() {
-		$http.jsonp('http://stapp.cloudant.com/ap/_design/views/_view/questions?callback=JSON_CALLBACK') 
-				.then( 
-						function(resp) {
-							console.log(resp);
-							window.localStorage['questions'] = JSON
-									.stringify(resp.data.rows);
-						}, function(err) {
-							console.error('ERR', err);
-							console.log(err.status);
-						})
-		if (window.localStorage['questions'] != null) {
-			console.log("questions loaded");
-		} else {
-			console.log("questions not loaded");
-		}
 
-		window.localStorage['questionOk'] = "0";
-		window.localStorage['questionNok'] = "0";
-	}
-	loadQuestions();
 });
 
 myApp
