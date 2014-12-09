@@ -2,7 +2,8 @@ var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
 		'ionic' ])
 var myPopup;
 var qrcode;
-var jsonarr = []; //array voor data bij te houden
+var jsonarr = []; // array voor data bij te houden
+var qrcodes = []; // array voor gescande qe codes bij te houden
 
 function makeInfoWindowEvent(map, infowindow, marker) {
 	return function() {
@@ -39,15 +40,15 @@ myApp
 						window.localStorage['questionNok'] = "0";
 
 					}
-					
+
 					showspinner();
-					
+
 					// if (window.localStorage['questions'] == null) {
 					loadQuestions();
 					// }
 
 					function initialize() {
-						
+
 						if (window.localStorage['questions'] == null) {
 							setTimeout(function() {
 								initialize();
@@ -94,7 +95,7 @@ myApp
 												marker));
 
 							}
-							
+
 							$scope.map = map;
 
 							google.maps.event.addListenerOnce(map,
@@ -106,11 +107,9 @@ myApp
 									});
 						}
 						;
-
 					}
-					
+
 					initialize();
-					
 
 					if (localStorage.getItem('logins') != null) {
 						console.log(localStorage.getItem('logins'));
@@ -136,6 +135,10 @@ myApp
 								.scan()
 								.then(
 										function(imageData) {
+											
+											if (qrcodes.length != 0)
+												qrcodes = JSON
+														.parse(localStorage["qrcodes"]);
 											for (i = 0; i < jsonarr.length; i++) {
 												if (imageData.text == jsonarr[i].value.qrCode) {
 													qrcode = imageData.text;
@@ -147,21 +150,22 @@ myApp
 															.log("Cancelled -> "
 																	+ imageData.cancelled);
 													found = true;
-													break;
-												}
 
-												if (found == false && i>8) {
+													qrcodes.push(qrcode);
+													localStorage["qrcodes"] = JSON
+															.stringify(qrcodes);
+												}
+												if (found == false && i > 9) {
 													var alertPopup;
 													alertPopup = $ionicPopup
 															.alert({
 																title : 'Ongeldige QR-Code',
 																buttons : [ {
-																	text : imageData.text,
+																	text : OK,
 																	type : 'button-assertive'
-																	}
-																 ]
+																} ]
 															});
-											}
+												}
 											}
 
 										},
@@ -259,7 +263,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 			alertPopup = $ionicPopup.alert({
 				title : 'U antwoord is opgeslagen!',
 				buttons : [ {
-					text : 'OK',
+					text : qrcodes.toString(),
 					type : 'button-assertive',
 					onTap : function() {
 						$state.go('index');
@@ -294,9 +298,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 	$scope.changeState = function() {
 		// console.log("hallo ");
 		$state.go('question');
-
 	}
-
 })
 
 myApp.controller('LoginCtrl', function($scope, $ionicPopup) {
