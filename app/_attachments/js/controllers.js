@@ -40,14 +40,14 @@ myApp
 
 					}
 					
-					
+					showspinner();
 					
 					// if (window.localStorage['questions'] == null) {
 					loadQuestions();
 					// }
 
 					function initialize() {
-						showspinner();
+						
 						if (window.localStorage['questions'] == null) {
 							setTimeout(function() {
 								initialize();
@@ -124,7 +124,8 @@ myApp
 
 					function showspinner() {
 						$ionicLoading.show({
-							template : '<i class="icon ion-loading-a"></i>',
+							templateUrl : 'templates/loading.html',
+							duration : 3000
 						});
 					}
 					;
