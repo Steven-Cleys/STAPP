@@ -182,8 +182,7 @@ myApp
 
 			function showspinner() {
 				$ionicLoading.show({
-					templateUrl : 'templates/loading.html',
-					duration : 3000
+					template : '<i class="icon ion-loading-a"></i>'
 				});
 			}
 			;
