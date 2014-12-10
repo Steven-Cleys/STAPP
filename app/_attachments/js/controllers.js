@@ -52,7 +52,11 @@ myApp
 
 
 			function initialize() {
-				directionsDisplay = new google.maps.DirectionsRenderer();
+				directionsDisplay = new google.maps.DirectionsRenderer({polylineOptions: {
+				      strokeColor: "red",
+				      strokeOpacity:0.5,
+				      strokeWeight: 6
+			    }});
 				if (window.localStorage['questions'] == null) {
 					setTimeout(function() {
 						initialize();
@@ -117,6 +121,8 @@ myApp
 					});
 				}
 				;
+				
+				directionsDisplay.setMap(map);
 
 			}
 
@@ -126,7 +132,8 @@ myApp
 			var directionsService = new google.maps.DirectionsService();
 
 			function calcRoute(start,end) {
-				
+				var startje = new google.maps.LatLng(start.k, start.B);
+				var endje =  new google.maps.LatLng(end.k, end.B);
 				var request = {
 						origin:start,
 						destination:end,
