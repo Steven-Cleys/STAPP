@@ -1,7 +1,7 @@
 var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
                                                   'ionic' ])
                                                   var myPopup;
-var qrcode = '4lc';
+var qrcode;
 var jsonarr = []; //array voor data bij te houden
 var markers = [];
 var start;
