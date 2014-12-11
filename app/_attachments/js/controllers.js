@@ -2,9 +2,6 @@ var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
                                                   'ionic' ])
                                                   var myPopup;
 var qrcode;
-var qrcodes =[]; //Dit wordt gebruikt bij de QuestionCtrl
-var ok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
-var nok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var jsonarr = []; //array voor data bij te houden
 var markers = [];
 var start;
@@ -23,13 +20,6 @@ myApp
 				$cordovaBarcodeScanner, $state) {
 
 			function loadQuestions() {
-				
-				if(localStorage['qrcodes'] == null){
-					localStorage['qrcodes'] = JSON.stringify(qrcodes);
-					localStorage['questionOk'] = JSON.stringify(ok);
-					localStorage['questionNok'] = JSON.stringify(nok);
-				}
-				
 				$http
 				.jsonp(
 				'http://stapp.cloudant.com/ap/_design/views/_view/questions?callback=JSON_CALLBACK')
@@ -271,105 +261,68 @@ myApp
 
 myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 
-	jsonarr = JSON.parse(localStorage['questions']);
-	var execute = true;
-	var valid = false;
-	qrcodes = JSON.parse(localStorage['qrcodes']);
-	
-	for(var i=0; i<qrcodes.length; i++){
-		if(qrcode == qrcodes[i]){
-			execute = false;
-		}
-	}
-	for(var i=0; i<arr.length; i++){
-		if(qrcode == arr[i].value.qrCode){
-			valid = true;
-		}
-	}
-	if(valid == false){
-		alertPopup = $ionicPopup.alert({title: 'U heeft een foutive qrcode gescaned', buttons: [{text: 'OK', type: 'button-assertive', onTap : function() {$state.go('index');}}]});
-	}
-	
-	if(execute){
-		qrcodes.push(qrcode);
-		localStorage['qrcodes'] = JSON.stringify(qrcodes);
-		var question = {};
-		
-		for (var i = 0; i < jsonarr.length; i++) {
-			var doc = jsonarr[i].value;
-			if (qrcode == doc.qrCode) {
-				question.hotspot = doc.hotspot;
-				question.question = doc.question;
-				question.image = "img/fotosVragen/" + qrcode + ".png";
-				question.allAnswers = doc.allAnswers;
-				if (doc.allAnswers != null) {
-					document.getElementById("multi").style.visibility = "visible";
-					document.getElementById("open").style.visibility = "hidden";
-				}
-				question.answer = doc.answer
-			}
-		}
-		$scope.question = [ {
-			"question" : question.question
-		} ];
-		$scope.hotspot = [ {
-			"hotspot" : question.hotspot
-		} ];
-		$scope.image = [{"image": question.image}];
+	var question = {};
+	jsonarr = JSON.parse(window.localStorage['questions']);
 
-		if (question.allAnswers != null) {
-			$scope.answer = [];
-			var possibleAnswer = question.allAnswers.split(";");
-			for (var i = 0; i < possibleAnswer.length; i++) {
-				$scope.answer.push({
-					"items" : possibleAnswer[i]
-				})
+	for (var i = 0; i < jsonarr.length; i++) {
+		var doc = jsonarr[i].value;
+		if (qrcode == doc.qrCode) {
+			question.hotspot = doc.hotspot;
+			question.question = doc.question;
+			if (doc.image != null) {// de rest van de image
+				// nog in orde
+				// maken!!!!!!!!!!
+				question.image = doc.image;
+			} else {
+				console.log("Geen image");
 			}
+			question.allAnswers = doc.allAnswers;
+			if (doc.allAnswers != null) {
+				document.getElementById("multi").style.visibility = "visible";
+				document.getElementById("open").style.visibility = "hidden";
+			}
+			question.answer = doc.answer
 		}
-	}else{
-		alertPopup = $ionicPopup.alert({title: 'U heeft deze qrcode al gescaned', buttons: [{text: 'OK', type: 'button-assertive', onTap : function() {$state.go('index');}}]});
+	}
+	$scope.question = [ {
+		"question" : question.question
+	} ];
+	$scope.hotspot = [ {
+		"hotspot" : question.hotspot
+	} ];
+
+	if (question.allAnswers != null) {
+		$scope.answer = [];
+		var possibleAnswer = question.allAnswers.split(";");
+		for (var i = 0; i < possibleAnswer.length; i++) {
+			$scope.answer.push({
+				"items" : possibleAnswer[i]
+			})
+		}
 	}
 
 	$scope.validate = function() {
-		ok = window.localStorage['questionOk'];
-		nok = window.localStorage['questionNok'];
+		var ok = window.localStorage['questionOk'];
+		var nok = window.localStorage['questionNok'];
+		var i = ok.length;
 		var answer = $scope.validate.answer;
 		var alertPopup;
-		
 		if (answer != null) {
 			if (answer == question.answer) {
-				ok.push(qrcode);
-				localStorage['questionOk'] = JSON.stringify(ok);
+				ok = ok + ";" + qrcode;
 			} else {
-				nok.push(qrcode);
-				localStorage['questionNok'] = JSON.stringify(nok);
+				nok = nok + ";" + qrcode;
 			}
-			if(qrcodes.length == 10){
-				alertPopup = $ionicPopup.alert({
-					title : 'U heeft alle vragen beantwoord!',
-					buttons : [ {
-						text : "OK",
-						type : 'button-assertive',
-						onTap : function() {
-							$state.go('index');
-						}
-					} ]
-				});
-				var points = JSON.parse(localStorage['questionOk']).length;
-				var login = JSON.parse(localStorage['logins']);
-				var sent = "{'team':" + login.team + ", 'name':" + login.name + ", 'email':" + login.email + ", 'answersOk':" + localStorage['questionOk'] + ", 'answersNok':" + localStorage['questionNok'] + ", 'points':" + points + "}";
-			}else{
-				alertPopup = $ionicPopup.alert({
-					title : 'U antwoord is opgeslagen!',
-					buttons : [ {
-						text : 'OK',
-						type : 'button-assertive',
-						onTap : function() {
-							$state.go('index');
-						}
-					} ]
-				});
-			}
+			alertPopup = $ionicPopup.alert({
+				title : 'U antwoord is opgeslagen!',
+				buttons : [ {
+					text : 'OK',
+					type : 'button-assertive',
+					onTap : function() {
+						$state.go('index');
+					}
+				} ]
+			});
 		} else {
 			if (question.allAnswers != null) {
 				alertPopup = $ionicPopup.alert({
@@ -389,6 +342,8 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 				});
 			}
 		}
+		window.localStorage['questionOk'] = ok;
+		window.localStorage['questionNok'] = nok;
 		console.log(window.localStorage['questionOk']);
 		console.log(window.localStorage['questionNok']);
 	}
