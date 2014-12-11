@@ -4,16 +4,15 @@
    <ion-content id="questionbtns">
     <ion-list>
      <h2 ng-repeat="item in hotspot" align="center">Hotspot: {{ item.hotspot }}</h2>
-     <br/>
+     
+     <h2 ng-repeat="item in image" align="center"><img src="{{ item.image }}" alt="foto" style="width:100%"></h2> 
+     <br>
      
      <h4 ng-repeat="item in question" align="center">{{ item.question }}</h4>
      <br/>
      
      <p id="multi">
      <ion-radio ng-repeat="item in answer" ng-value="item.items" ng-model="validate.answer">{{ item.items }}</ion-radio>
-     <!-- <button ng-repeat="item in answer" ng-click="validate()" ng-value="item.items" ng-model="validate.answer" class="button button-block button-assertive">
-      {{ item.items }}
-     </button> -->
      </p>
      
      <p id="open">
