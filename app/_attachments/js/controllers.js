@@ -1,7 +1,7 @@
 var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
                                                   'ionic' ])
                                                   var myPopup;
-var qrcode;
+var qrcode; //87t
 var qrcodes =[]; //Dit wordt gebruikt bij de QuestionCtrl
 var ok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var nok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
@@ -48,9 +48,6 @@ myApp
 						} else {
 							console.log("questions not loaded");
 						}
-
-				window.localStorage['questionOk'] = "0";
-				window.localStorage['questionNok'] = "0";
 
 			}
 
@@ -281,8 +278,8 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 			execute = false;
 		}
 	}
-	for(var i=0; i<arr.length; i++){
-		if(qrcode == arr[i].value.qrCode){
+	for(var i=0; i<jsonarr.length; i++){
+		if(qrcode == jsonarr[i].value.qrCode){
 			valid = true;
 		}
 	}
@@ -297,6 +294,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 		
 		for (var i = 0; i < jsonarr.length; i++) {
 			var doc = jsonarr[i].value;
+			console.log("docje" + doc);
 			if (qrcode == doc.qrCode) {
 				question.hotspot = doc.hotspot;
 				question.question = doc.question;
@@ -331,8 +329,8 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 	}
 
 	$scope.validate = function() {
-		ok = window.localStorage['questionOk'];
-		nok = window.localStorage['questionNok'];
+		ok = JSON.parse(window.localStorage['questionOk']);
+		nok = JSON.parse(window.localStorage['questionNok']);
 		var answer = $scope.validate.answer;
 		var alertPopup;
 		
