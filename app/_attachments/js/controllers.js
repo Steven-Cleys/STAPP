@@ -2,7 +2,7 @@ var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
                                                   'ionic' ])
                                                   var myPopup;
 var qrcode; //87t
-var qrcodes =[]; //Dit wordt gebruikt bij de QuestionCtrl
+var qrcodes =["87t","4z7","s53","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
 var ok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var nok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var jsonarr = []; //array voor data bij te houden
@@ -152,10 +152,12 @@ myApp
 					}
 				});
 			}
+			
+			progress();
 
 			if (qrcode != null){
 
-				if(qrcodes.length <= 10)
+				if(qrcodes.length != 10)
 				{
 					for (i = 0; i < markers.length; i++) {
 						if(markers[i].id == qrcode){
