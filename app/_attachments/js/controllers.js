@@ -23,13 +23,13 @@ myApp
 				$cordovaBarcodeScanner, $state) {
 
 			function loadQuestions() {
-				
+
 				if(localStorage['qrcodes'] == null){
 					localStorage['qrcodes'] = JSON.stringify(qrcodes);
 					localStorage['questionOk'] = JSON.stringify(ok);
 					localStorage['questionNok'] = JSON.stringify(nok);
 				}
-				
+
 				$http
 				.jsonp(
 				'http://stapp.cloudant.com/ap/_design/views/_view/questions?callback=JSON_CALLBACK')
@@ -60,10 +60,10 @@ myApp
 
 			function initialize() {
 				directionsDisplay = new google.maps.DirectionsRenderer({polylineOptions: {
-				      strokeColor: "red",
-				      strokeOpacity:0.5,
-				      strokeWeight: 6
-			    }});
+					strokeColor: "red",
+					strokeOpacity:0.5,
+					strokeWeight: 6
+				}});
 				if (window.localStorage['questions'] == null) {
 					setTimeout(function() {
 						initialize();
@@ -86,7 +86,7 @@ myApp
 					var map = new google.maps.Map(document
 							.getElementById("map"), mapOptions);
 
-					
+
 
 					jsonarr = JSON
 					.parse(window.localStorage['questions']);
@@ -128,7 +128,7 @@ myApp
 					});
 				}
 				;
-				
+
 				directionsDisplay.setMap(map);
 
 			}
@@ -155,33 +155,40 @@ myApp
 
 			if (qrcode != null){
 
-				for (i = 0; i < markers.length; i++) {
-					if(markers[i].id == qrcode){
-						start = markers[i].position;
-						
-						if(i == (markers.length -1)){
-							end = markers[0].position;
+				if(qrcodes.length <= 10)
+				{
+					for (i = 0; i < markers.length; i++) {
+						if(markers[i].id == qrcode){
+							start = markers[i].position;
+
+							if(i == (markers.length -1)){
+								end = markers[0].position;
+							}
+							else 
+							{
+								end = markers[i+1].position;
+							}
+
+							console.log(start);
+							console.log(end);
+
 						}
-						else 
-						{
-							end = markers[i+1].position;
-						}
-						
-						console.log(start);
-						console.log(end);
-						
 					}
+					calcRoute(start,end);
 				}
-				calcRoute(start,end);
+				else{
+					calcRoute(end,  new google.maps.LatLng(51.2244, 4.38566);)
+				}
+					
 			}
-			
+
 			function progress() {
-				
+
 				var progress  = qrcodes.length;
 				$scope.progress = progress;
 				console.log(progress);
 			}
-			
+
 			progress();
 
 			if (localStorage.getItem('logins') != null) {
@@ -279,7 +286,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 	var execute = true;
 	var valid = false;
 	qrcodes = JSON.parse(localStorage['qrcodes']);
-	
+
 	for(var i=0; i<qrcodes.length; i++){
 		if(qrcode == qrcodes[i]){
 			execute = false;
@@ -293,12 +300,12 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 	if(valid == false){
 		alertPopup = $ionicPopup.alert({title: 'U heeft een foutive qrcode gescaned', buttons: [{text: 'OK', type: 'button-assertive', onTap : function() {$state.go('index');}}]});
 	}
-	
+
 	if(execute){
 		qrcodes.push(qrcode);
 		localStorage['qrcodes'] = JSON.stringify(qrcodes);
 		var question = {};
-		
+
 		for (var i = 0; i < jsonarr.length; i++) {
 			var doc = jsonarr[i].value;
 			console.log("docje" + doc);
@@ -340,7 +347,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 		nok = JSON.parse(window.localStorage['questionNok']);
 		var answer = $scope.validate.answer;
 		var alertPopup;
-		
+
 		if (answer != null) {
 			if (answer == question.answer) {
 				ok.push(qrcode);
@@ -359,6 +366,8 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 							$state.go('index');
 						}
 					} ]
+
+
 				});
 				var points = JSON.parse(localStorage['questionOk']).length;
 				var login = JSON.parse(localStorage['logins']);
