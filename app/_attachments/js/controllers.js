@@ -175,7 +175,14 @@ myApp
 				calcRoute(start,end);
 			}
 			
-
+			function progress() {
+				
+				var progress  = qrcodes.length;
+				$scope.progress = progress;
+				console.log(progress);
+			}
+			
+			progress();
 
 			if (localStorage.getItem('logins') != null) {
 				console.log(localStorage.getItem('logins'));
