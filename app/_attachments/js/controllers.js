@@ -50,7 +50,10 @@ myApp
 						}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 					}
+=======
+>>>>>>> parent of badd7eb... qrcode scanned fix
 =======
 >>>>>>> parent of badd7eb... qrcode scanned fix
 			}
@@ -86,6 +89,7 @@ myApp
 							zoom : 16,
 							mapTypeId : google.maps.MapTypeId.ROADMAP
 					};
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 					showspinner();
@@ -123,6 +127,8 @@ myApp
 							};
 =======
 >>>>>>> parent of badd7eb... qrcode scanned fix
+=======
+>>>>>>> parent of badd7eb... qrcode scanned fix
 
 					var map = new google.maps.Map(document
 							.getElementById("map"), mapOptions);
@@ -136,6 +142,7 @@ myApp
 						var spot = jsonarr[i];
 						var myLatLng = new google.maps.LatLng(
 								spot.value.lat, spot.value.lon);
+<<<<<<< HEAD
 
 						var marker = new google.maps.Marker({
 							map : map,
@@ -203,9 +210,71 @@ myApp
 					for (i = 0; i < markers.length; i++) {
 						if(markers[i].id == qrcode){
 							start = markers[i].position;
+=======
 
-					progress();
+						var marker = new google.maps.Marker({
+							map : map,
+							position : myLatLng,
+							title : spot.value.hotspot,
+							id: spot.value.qrCode
+						});
+						console.log(marker.id);
 
+						var infowindow = new google.maps.InfoWindow({
+							content : spot.value.hotspot + "<br>"
+							+ spot.value.adres
+						});
+						console.log(spot.value.adres);
+						marker.setMap(map);
+						google.maps.event.addListener(marker, 'click',
+								makeInfoWindowEvent(map, infowindow,
+										marker));
+
+						markers.push(marker);
+					}
+
+					$scope.map = map;
+
+					google.maps.event.addListenerOnce(map,
+							'tilesloaded', function() {
+						$ionicLoading.hide();
+
+						console.log("map loaded");
+
+					});
+				}
+				;
+
+				directionsDisplay.setMap(map);
+
+			}
+
+			initialize();
+
+			var directionsDisplay;
+			var directionsService = new google.maps.DirectionsService();
+
+			function calcRoute(start,end) {
+				var startje = new google.maps.LatLng(start.k, start.B);
+				var endje =  new google.maps.LatLng(end.k, end.B);
+				var request = {
+						origin:start,
+						destination:end,
+						travelMode: google.maps.TravelMode.WALKING
+				};
+				directionsService.route(request, function(response, status) {
+					if (status == google.maps.DirectionsStatus.OK) {
+						directionsDisplay.setDirections(response);
+					}
+				});
+			}
+			
+			progress();
+>>>>>>> parent of badd7eb... qrcode scanned fix
+
+			if (qrcode != null){
+
+<<<<<<< HEAD
 					if (localStorage.getItem('logins') != null) {
 						console.log(localStorage.getItem('logins'));
 					} else {
@@ -293,11 +362,14 @@ myApp
 =======
 			if (qrcode != null){
 
+=======
+>>>>>>> parent of badd7eb... qrcode scanned fix
 				if(qrcodes.length != 10)
 				{
 					for (i = 0; i < markers.length; i++) {
 						if(markers[i].id == qrcode){
 							start = markers[i].position;
+<<<<<<< HEAD
 >>>>>>> parent of badd7eb... qrcode scanned fix
 
 							if(i == (markers.length -1)){
@@ -308,6 +380,17 @@ myApp
 								end = markers[i+1].position;
 							}
 
+=======
+
+							if(i == (markers.length -1)){
+								end = markers[0].position;
+							}
+							else 
+							{
+								end = markers[i+1].position;
+							}
+
+>>>>>>> parent of badd7eb... qrcode scanned fix
 							console.log(start);
 							console.log(end);
 
