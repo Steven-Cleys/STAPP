@@ -9,6 +9,8 @@ var jsonarr = []; //array voor data bij te houden
 var markers = [];
 var start;
 var end;
+var startTime;
+var endTime;
 
 localStorage.setItem('logins', 'amagad'); //to temporay disable logging screen for testing purposes.
 
@@ -380,6 +382,12 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 				nok.push(qrcode);
 				localStorage['questionNok'] = JSON.stringify(nok);
 			}
+			
+			if(qrcodes.length == 1){
+				var date = new Date();
+				startTime = date.getTime();
+			}
+			
 			if(qrcodes.length == 10){
 				alertPopup = $ionicPopup.alert({
 					title : 'U heeft alle vragen beantwoord!',
@@ -393,6 +401,8 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 
 
 				});
+				var date = new Date();
+				endTime = date.getTime();
 				var points = JSON.parse(localStorage['questionOk']).length;
 				var login = JSON.parse(localStorage['logins']);
 				var sent = "{'team':" + login.team + ", 'name':" + login.name + ", 'email':" + login.email + ", 'answersOk':" + localStorage['questionOk'] + ", 'answersNok':" + localStorage['questionNok'] + ", 'points':" + points + "}";
@@ -434,6 +444,11 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 		console.log(window.localStorage['questionNok']);
 	}
 
+	function calcTime(endTime, startTime){
+		endTime - startTime;
+		
+		
+	}
 	$scope.changeState = function() {
 		// console.log("hallo ");
 		$state.go('question');
