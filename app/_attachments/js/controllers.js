@@ -1,7 +1,7 @@
 var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
                                                   'ionic' ])
                                                   var myPopup;
-var qrcode = "b36"
+var qrcode = "b36";
 var qrcodes =["1x9","87t","4z7","s53","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
 var ok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var nok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
@@ -392,7 +392,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 				var date = new Date();
 				endTime = date.getTime();
 				var points = JSON.parse(localStorage['questionOk']).length;
-				var login = JSON.parse(localStorage['logins']);
+				var login = localStorage.getItem('logins');
 				var sent = "{'team':" + login.team + ", 'name':" + login.name + ", 'email':" + login.email + ", 'answersOk':" + localStorage['questionOk'] + ", 'answersNok':" + localStorage['questionNok'] + ", 'points':" + points + "}";
 				localStorage.clear();
 				qrcodes.length = 0;
