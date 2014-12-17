@@ -10,6 +10,8 @@ var markers = [];
 var start;
 var end;
 
+localStorage.setItem('logins', 'amagad'); //to temporay disable logging screen for testing purposes.
+
 function makeInfoWindowEvent(map, infowindow, marker) {
 	return function() {
 		infowindow.open(map, marker);
@@ -393,6 +395,8 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 				var points = JSON.parse(localStorage['questionOk']).length;
 				var login = JSON.parse(localStorage['logins']);
 				var sent = "{'team':" + login.team + ", 'name':" + login.name + ", 'email':" + login.email + ", 'answersOk':" + localStorage['questionOk'] + ", 'answersNok':" + localStorage['questionNok'] + ", 'points':" + points + "}";
+				localStorage.clear();
+				qrcodes.length = 0;
 			}else{
 				alertPopup = $ionicPopup.alert({
 					title : 'U antwoord is opgeslagen!',
