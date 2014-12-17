@@ -2,13 +2,15 @@ var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
                                                   'ionic' ])
                                                   var myPopup;
 var qrcode; //87t
-var qrcodes =["87t","4z7","s53","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
+var qrcodes = ["87t","4z7","s53","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
 var ok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var nok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var jsonarr = []; //array voor data bij te houden
 var markers = [];
 var start;
 var end;
+
+localStorage.setItem('logins', 'amagad'); //to temporay disable logging screen for testing purposes.
 
 function makeInfoWindowEvent(map, infowindow, marker) {
 	return function() {
@@ -253,7 +255,7 @@ myApp
 									}
 									}else {
 										alertPopup = $ionicPopup.alert({
-											title : 'U heeft deze qrcode al gescaned',
+											title : 'U heeft deze qrcode al gescanned',
 											buttons : [ {
 												text : 'OK',
 												type : 'button-assertive'
@@ -393,6 +395,8 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 				var points = JSON.parse(localStorage['questionOk']).length;
 				var login = JSON.parse(localStorage['logins']);
 				var sent = "{'team':" + login.team + ", 'name':" + login.name + ", 'email':" + login.email + ", 'answersOk':" + localStorage['questionOk'] + ", 'answersNok':" + localStorage['questionNok'] + ", 'points':" + points + "}";
+				localStorage.clear();
+				qrcodes = [];
 			}else{
 				alertPopup = $ionicPopup.alert({
 					title : 'U antwoord is opgeslagen!',
