@@ -49,13 +49,6 @@ myApp
 							console.log("questions not loaded");
 						}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-					}
-=======
->>>>>>> parent of badd7eb... qrcode scanned fix
-=======
->>>>>>> parent of badd7eb... qrcode scanned fix
 			}
 
 			showspinner();
@@ -78,8 +71,7 @@ myApp
 				} else {
 					// go do that thing
 
-					var myLatlng = new google.maps.LatLng(
-							51.21968667200008, 4.4009229560000449); // to
+					var myLatlng = new google.maps.LatLng(51.216126, 4.410546); // to
 					// do,
 					// current
 					// coords
@@ -89,46 +81,6 @@ myApp
 							zoom : 16,
 							mapTypeId : google.maps.MapTypeId.ROADMAP
 					};
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-					showspinner();
-
-					// if (window.localStorage['questions'] == null) {
-					loadQuestions();
-					// }
-
-					function initialize() {
-						directionsDisplay = new google.maps.DirectionsRenderer(
-								{
-									polylineOptions : {
-										strokeColor : "red",
-										strokeOpacity : 0.5,
-										strokeWeight : 6
-									}
-								});
-						if (window.localStorage['questions'] == null) {
-							setTimeout(function() {
-								initialize();
-							}, 200);
-						} else {
-							// go do that thing
-
-							var myLatlng = new google.maps.LatLng(
-									51.21968667200008, 4.4009229560000449); // to
-							// do,
-							// current
-							// coords
-
-							var mapOptions = {
-								center : myLatlng,
-								zoom : 16,
-								mapTypeId : google.maps.MapTypeId.ROADMAP
-							};
-=======
->>>>>>> parent of badd7eb... qrcode scanned fix
-=======
->>>>>>> parent of badd7eb... qrcode scanned fix
 
 					var map = new google.maps.Map(document
 							.getElementById("map"), mapOptions);
@@ -142,7 +94,6 @@ myApp
 						var spot = jsonarr[i];
 						var myLatLng = new google.maps.LatLng(
 								spot.value.lat, spot.value.lon);
-<<<<<<< HEAD
 
 						var marker = new google.maps.Marker({
 							map : map,
@@ -203,174 +154,15 @@ myApp
 			
 			progress();
 
-<<<<<<< HEAD
+			if (qrcode != null){
+
+
 				if(qrcodes.length != 10)
 
 				{
 					for (i = 0; i < markers.length; i++) {
 						if(markers[i].id == qrcode){
 							start = markers[i].position;
-=======
-
-						var marker = new google.maps.Marker({
-							map : map,
-							position : myLatLng,
-							title : spot.value.hotspot,
-							id: spot.value.qrCode
-						});
-						console.log(marker.id);
-
-						var infowindow = new google.maps.InfoWindow({
-							content : spot.value.hotspot + "<br>"
-							+ spot.value.adres
-						});
-						console.log(spot.value.adres);
-						marker.setMap(map);
-						google.maps.event.addListener(marker, 'click',
-								makeInfoWindowEvent(map, infowindow,
-										marker));
-
-						markers.push(marker);
-					}
-
-					$scope.map = map;
-
-					google.maps.event.addListenerOnce(map,
-							'tilesloaded', function() {
-						$ionicLoading.hide();
-
-						console.log("map loaded");
-
-					});
-				}
-				;
-
-				directionsDisplay.setMap(map);
-
-			}
-
-			initialize();
-
-			var directionsDisplay;
-			var directionsService = new google.maps.DirectionsService();
-
-			function calcRoute(start,end) {
-				var startje = new google.maps.LatLng(start.k, start.B);
-				var endje =  new google.maps.LatLng(end.k, end.B);
-				var request = {
-						origin:start,
-						destination:end,
-						travelMode: google.maps.TravelMode.WALKING
-				};
-				directionsService.route(request, function(response, status) {
-					if (status == google.maps.DirectionsStatus.OK) {
-						directionsDisplay.setDirections(response);
-					}
-				});
-			}
-			
-			progress();
->>>>>>> parent of badd7eb... qrcode scanned fix
-
-			if (qrcode != null){
-
-<<<<<<< HEAD
-					if (localStorage.getItem('logins') != null) {
-						console.log(localStorage.getItem('logins'));
-					} else {
-						console.log("its empty");
-						myPopup = $ionicPopup.show({
-							templateUrl : 'templates/login.html',
-							scope : $scope
-						});
-					}
-					calcRoute(start,end);
-				}
-				else{
-					calcRoute(end,  new google.maps.LatLng(51.216126, 4.410546))
-				}
-					
-			}
-
-			function progress() {
-
-
-					function showspinner() {
-						$ionicLoading.show({
-							template : '<i class="icon ion-loading-a"></i>'
-						});
-					}
-					;
-
-					$scope.scanBarcode = function() {
-						var found = false;
-						$cordovaBarcodeScanner
-								.scan()
-								.then(
-										function(imageData) {
-											var execute = true;
-											for (var i = 0; i < qrcodes.length; i++) {
-												if (imageData.text == qrcodes[i]) { 
-													execute = false;
-												}
-											}
-											
-											if (execute){
-											for (i = 0; i < jsonarr.length; i++) {
-												if (imageData.text == jsonarr[i].value.qrCode) {
-													qrcode = imageData.text;
-													$state.go('question');
-													console
-															.log("Barcode Format -> "
-																	+ imageData.format);
-													console
-															.log("Cancelled -> "
-																	+ imageData.cancelled);
-													found = true;
-													break;
-												}
-
-												if (found == false && i > 8) {
-													var alertPopup;
-													alertPopup = $ionicPopup
-															.alert({
-																title : 'Ongeldige QR-Code',
-																buttons : [ {
-																	text : imageData.text,
-																	type : 'button-assertive'
-																} ]
-															});
-												}
-											}
-											}else {
-												alertPopup = $ionicPopup.alert({
-													title : 'U heeft deze qrcode al gescaned',
-													buttons : [ {
-														text : 'OK',
-														type : 'button-assertive'
-													} ]
-												});
-											}
-
-
-										},
-										function(error) {
-											console.log("An error happened -> "
-													+ error);
-										});
-					};
-=======
-			if (qrcode != null){
-
-=======
->>>>>>> parent of badd7eb... qrcode scanned fix
-				if(qrcodes.length != 10)
-				{
-					for (i = 0; i < markers.length; i++) {
-						if(markers[i].id == qrcode){
-							start = markers[i].position;
-<<<<<<< HEAD
->>>>>>> parent of badd7eb... qrcode scanned fix
 
 							if(i == (markers.length -1)){
 								end = markers[0].position;
@@ -380,17 +172,6 @@ myApp
 								end = markers[i+1].position;
 							}
 
-=======
-
-							if(i == (markers.length -1)){
-								end = markers[0].position;
-							}
-							else 
-							{
-								end = markers[i+1].position;
-							}
-
->>>>>>> parent of badd7eb... qrcode scanned fix
 							console.log(start);
 							console.log(end);
 
@@ -433,43 +214,61 @@ myApp
 			$scope.scanBarcode = function() {
 				var found = false;
 				$cordovaBarcodeScanner
-				.scan()
-				.then(
-						function(imageData) {
-							for (i = 0; i < jsonarr.length; i++) {
-								if (imageData.text == jsonarr[i].value.qrCode) {
-									qrcode = imageData.text;
-									$state.go('question');
-									console
-									.log("Barcode Format -> "
-											+ imageData.format);
-									console
-									.log("Cancelled -> "
-											+ imageData.cancelled);
-									found = true;
-									break;
-								}
-
-								if (found == false && i>8) {
-									var alertPopup;
-									alertPopup = $ionicPopup
-									.alert({
-										title : 'Ongeldige QR-Code',
-										buttons : [ {
-											text : imageData.text,
-											type : 'button-assertive'
+						.scan()
+						.then(
+								function(imageData) {
+									var execute = true;
+									for (var i = 0; i < qrcodes.length; i++) {
+										if (imageData.text == qrcodes[i]) { 
+											execute = false;
 										}
-										]
-									});
-								}
-							}
+									}
+									
+									if (execute){
+									for (i = 0; i < jsonarr.length; i++) {
+										if (imageData.text == jsonarr[i].value.qrCode) {
+											qrcode = imageData.text;
+											$state.go('question');
+											console
+													.log("Barcode Format -> "
+															+ imageData.format);
+											console
+													.log("Cancelled -> "
+															+ imageData.cancelled);
+											found = true;
+											break;
+										}
 
-						},
-						function(error) {
-							console.log("An error happened -> "
-									+ error);
-						});
+										if (found == false && i > 8) {
+											var alertPopup;
+											alertPopup = $ionicPopup
+													.alert({
+														title : 'Ongeldige QR-Code',
+														buttons : [ {
+															text : imageData.text,
+															type : 'button-assertive'
+														} ]
+													});
+										}
+									}
+									}else {
+										alertPopup = $ionicPopup.alert({
+											title : 'U heeft deze qrcode al gescaned',
+											buttons : [ {
+												text : 'OK',
+												type : 'button-assertive'
+											} ]
+										});
+									}
+
+
+								},
+								function(error) {
+									console.log("An error happened -> "
+											+ error);
+								});
 			};
+
 
 			// showspinner();
 
