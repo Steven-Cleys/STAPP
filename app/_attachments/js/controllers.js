@@ -391,6 +391,8 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 			if(qrcodes.length == 10){
 				var date = new Date();
 				endTime = date.getTime();
+				
+				var difference = endTime-startTime;
 				var points = JSON.parse(localStorage['questionOk']).length;
 				var login = localStorage.getItem('logins');
 				var sent = "{'team':" + login.team + ", 'name':" + login.name + ", 'email':" + login.email + ", 'answersOk':" + localStorage['questionOk'] + ", 'answersNok':" + localStorage['questionNok'] + ", 'points':" + points + "}";
@@ -400,7 +402,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 				alertPopup = $ionicPopup.alert({
 					title : 'U heeft alle vragen beantwoord!',
 					buttons : [ {
-						text : "OK",
+						text : difference,
 						type : 'button-assertive',
 						onTap : function() {
 							$state.go('index');
@@ -444,11 +446,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 		console.log(window.localStorage['questionNok']);
 	}
 
-	function calcTime(endTime, startTime){
-		endTime - startTime;
-		
-		
-	}
+	
 	$scope.changeState = function() {
 		// console.log("hallo ");
 		$state.go('question');
