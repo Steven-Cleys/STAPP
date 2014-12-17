@@ -155,7 +155,7 @@ myApp
 
 			if (qrcode != null){
 
-				if(qrcodes.length <= 10)
+				if(qrcodes.length < 10)
 				{
 					for (i = 0; i < markers.length; i++) {
 						if(markers[i].id == qrcode){
