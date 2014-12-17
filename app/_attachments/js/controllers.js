@@ -255,7 +255,7 @@ myApp
 									}
 									}else {
 										alertPopup = $ionicPopup.alert({
-											title : 'U heeft deze qrcode al gescand',
+											title : 'U heeft deze qrcode al gescaned',
 											buttons : [ {
 												text : 'OK',
 												type : 'button-assertive'
@@ -321,7 +321,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 		}
 	}
 	if(valid == false){
-		alertPopup = $ionicPopup.alert({title: 'U heeft een foutive qrcode gescand', buttons: [{text: 'OK', type: 'button-assertive', onTap : function() {$state.go('index');}}]});
+		alertPopup = $ionicPopup.alert({title: 'U heeft een foutive qrcode gescaned', buttons: [{text: 'OK', type: 'button-assertive', onTap : function() {$state.go('index');}}]});
 	}
 
 	if(execute){
@@ -362,7 +362,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 			}
 		}
 	}else{
-		alertPopup = $ionicPopup.alert({title: 'U heeft deze qrcode al gescand', buttons: [{text: 'OK', type: 'button-assertive', onTap : function() {$state.go('index');}}]});
+		alertPopup = $ionicPopup.alert({title: 'U heeft deze qrcode al gescaned', buttons: [{text: 'OK', type: 'button-assertive', onTap : function() {$state.go('index');}}]});
 	}
 
 	$scope.validate = function() {
