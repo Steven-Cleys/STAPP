@@ -1,8 +1,8 @@
 var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
                                                   'ionic' ])
                                                   var myPopup;
-var qrcode; //87t
-var qrcodes =["87t","4z7","s53","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
+var qrcode = "b36"
+var qrcodes =["1x9","87t","4z7","s53","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
 var ok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var nok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var jsonarr = []; //array voor data bij te houden
@@ -27,6 +27,7 @@ myApp
 			function loadQuestions() {
 
 				if(localStorage['qrcodes'] == null){
+					console.log("storage");
 					localStorage['qrcodes'] = JSON.stringify(qrcodes);
 					localStorage['questionOk'] = JSON.stringify(ok);
 					localStorage['questionNok'] = JSON.stringify(nok);
@@ -397,6 +398,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 				var sent = "{'team':" + login.team + ", 'name':" + login.name + ", 'email':" + login.email + ", 'answersOk':" + localStorage['questionOk'] + ", 'answersNok':" + localStorage['questionNok'] + ", 'points':" + points + "}";
 				localStorage.clear();
 				qrcodes.length = 0;
+				console.log("clear me");
 			}else{
 				alertPopup = $ionicPopup.alert({
 					title : 'U antwoord is opgeslagen!',
