@@ -71,8 +71,7 @@ myApp
 				} else {
 					// go do that thing
 
-					var myLatlng = new google.maps.LatLng(
-							51.21968667200008, 4.4009229560000449); // to
+					var myLatlng = new google.maps.LatLng(51.216126, 4.410546); // to
 					// do,
 					// current
 					// coords
