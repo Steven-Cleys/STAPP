@@ -389,6 +389,14 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 			}
 			
 			if(qrcodes.length == 10){
+				var date = new Date();
+				endTime = date.getTime();
+				var points = JSON.parse(localStorage['questionOk']).length;
+				var login = JSON.parse(localStorage['logins']);
+				var sent = "{'team':" + login.team + ", 'name':" + login.name + ", 'email':" + login.email + ", 'answersOk':" + localStorage['questionOk'] + ", 'answersNok':" + localStorage['questionNok'] + ", 'points':" + points + "}";
+				localStorage.clear();
+				qrcodes.length = 0;
+				console.log("clear me");
 				alertPopup = $ionicPopup.alert({
 					title : 'U heeft alle vragen beantwoord!',
 					buttons : [ {
@@ -401,14 +409,6 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 
 
 				});
-				var date = new Date();
-				endTime = date.getTime();
-				var points = JSON.parse(localStorage['questionOk']).length;
-				var login = JSON.parse(localStorage['logins']);
-				var sent = "{'team':" + login.team + ", 'name':" + login.name + ", 'email':" + login.email + ", 'answersOk':" + localStorage['questionOk'] + ", 'answersNok':" + localStorage['questionNok'] + ", 'points':" + points + "}";
-				localStorage.clear();
-				qrcodes.length = 0;
-				console.log("clear me");
 			}else{
 				alertPopup = $ionicPopup.alert({
 					title : 'U antwoord is opgeslagen!',
