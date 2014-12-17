@@ -180,7 +180,7 @@ myApp
 					calcRoute(start,end);
 				}
 				else{
-					calcRoute(end,  new google.maps.LatLng(51.216126, 4.410546))
+					calcRoute(end,  new google.maps.LatLng(51.2244, 4.38566))
 				}
 					
 			}
