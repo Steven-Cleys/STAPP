@@ -55,6 +55,38 @@ myApp
 						}
 
 					}
+			}
+
+			showspinner();
+
+			// if (window.localStorage['questions'] == null) {
+			loadQuestions();
+			// }
+
+
+			function initialize() {
+				directionsDisplay = new google.maps.DirectionsRenderer({polylineOptions: {
+					strokeColor: "red",
+					strokeOpacity:0.5,
+					strokeWeight: 6
+				}});
+				if (window.localStorage['questions'] == null) {
+					setTimeout(function() {
+						initialize();
+					}, 200);
+				} else {
+					// go do that thing
+
+					var myLatlng = new google.maps.LatLng(51.216126, 4.410546); // to
+					// do,
+					// current
+					// coords
+
+					var mapOptions = {
+							center : myLatlng,
+							zoom : 16,
+							mapTypeId : google.maps.MapTypeId.ROADMAP
+					};
 
 					showspinner();
 
@@ -191,6 +223,13 @@ myApp
 						$scope.progress = progress;
 						console.log(progress);
 					}
+
+				if(qrcodes.length != 10)
+
+				{
+					for (i = 0; i < markers.length; i++) {
+						if(markers[i].id == qrcode){
+							start = markers[i].position;
 
 					progress();
 
