@@ -12,7 +12,7 @@ var end;
 var startTime = 10000;
 var endTime;
 
-localStorage.setItem('logins', 'amagad'); //to temporay disable logging screen for testing purposes.
+//localStorage.setItem('logins', 'amagad'); //to temporay disable logging screen for testing purposes.
 
 function makeInfoWindowEvent(map, infowindow, marker) {
 	return function() {
@@ -85,7 +85,6 @@ myApp
 			$scope.imageSrc = 'img/Slakje.png';
 
 			      
-			
 
 			function loadQuestions() {
 
@@ -187,6 +186,8 @@ myApp
 					google.maps.event.addListenerOnce(map,
 							'tilesloaded', function() {
 						$ionicLoading.hide();
+						$scope.openModal();
+						
 
 						console.log("map loaded");
 
@@ -259,15 +260,28 @@ myApp
 			}
 
 			progress();
+			
+			$ionicModal.fromTemplateUrl('templates/login.html', {
+				scope : $scope
+			}).then(function(modal) {
+				$scope.loginModal = modal;
+			});
+			
 
 			if (localStorage.getItem('logins') != null) {
 				console.log(localStorage.getItem('logins'));
 			} else {
 				console.log("its empty");
-				myPopup = $ionicPopup.show({
-					templateUrl : 'templates/login.html',
-					scope : $scope
-				});
+				
+				$scope.loginModal.show();
+				// Create the login modal that we will use later
+
+				
+				
+//				myPopup = $ionicPopup.show({
+//					templateUrl : 'templates/login.html',
+//					scope : $scope
+//				});
 			}
 
 			function showspinner() {
