@@ -1,21 +1,29 @@
-<div ng-controller="LoginCtrl">
-<form ng-submit="doLogin()">
-<div class="list">
+<div>
+	<ion-view title="login" hide-back-button="true">
+	<form ng-submit="doLogin()" ng-controller="LoginCtrl">
+		<div class="list">
 
-	<label class="checkbox checkbox-assertive "> <input type="radio" ng-model="login.team" value="ind" name="group">
-		<div class="item-content">Individual</div>
+			<label class="item item-input item-select">
+				<div class="input-label">Taal</div> <select>
+					<option selected>Nederlands</option>
+					<option>English</option>
+			</select>
+			</label>
 
-	</label> <label class="checkbox checkbox-assertive"> <input type="radio" ng-model="login.team" value="group" name="group">
-		<div class="item-content">Group</div>
 
-	</label> 
-	<br></br>
-	<label class="item item-input"> <span class="input-label">Name</span>
-		<input type="text" ng-model="login.name" placeholder="Name" required> 
-	</label> <label class="item item-input"> <span class="input-label">Email</span>
-		<input type="email" ng-model="login.email" placeholder="Email" required>
-	</label>
-	<button class="button button-large button-block button-assertive" type="submit">Log in</button>
-</div>
-</form>
+			<ion-radio ng-model="login.team" ng-value="'ind'">Individueel</ion-radio>
+			<ion-radio ng-model="login.team" ng-value="'group'">Groep</ion-radio>
+
+			<label class="item item-input"> <span class="input-label">Naam</span>
+				<input type="text" ng-model="login.name" placeholder="Name" required>
+			</label> <label class="item item-input"> <span class="input-label">Email</span>
+				<input type="email" ng-model="login.email" placeholder="Email"
+				required>
+			</label>
+			<label>
+			<button class="button button-large button-block button-assertive"
+				type="submit">Log in</button></label>
+		</div>
+	</form>
+	</ion-view>
 </div>
