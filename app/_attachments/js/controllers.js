@@ -28,6 +28,7 @@ myApp
 	$cordovaBarcodeScanner, $state) {
 
 			$ionicModal.fromTemplateUrl('templates/image-modal.html', {
+				scope: $scope,
 				animation: 'slide-in-up'
 			}).then(function(modal) {
 				$scope.modal = modal;
