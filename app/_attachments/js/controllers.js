@@ -9,7 +9,7 @@ var jsonarr = []; //array voor data bij te houden
 var markers = [];
 var start;
 var end;
-var startTime;
+var startTime = 10000;
 var endTime;
 
 localStorage.setItem('logins', 'amagad'); //to temporay disable logging screen for testing purposes.
@@ -22,17 +22,17 @@ function makeInfoWindowEvent(map, infowindow, marker) {
 
 myApp
 .controller(
-		'MapCtrl', ['$scope', '$ionicModal', '$http', '$ionicLoading', '$ionicPopup',
-		'$cordovaBarcodeScanner', '$state', MapCtrl]); 
-		function MapCtrl($scope, $ionicModal, $http, $ionicLoading, $ionicPopup,
-	$cordovaBarcodeScanner, $state) {
-
-			$ionicModal.fromTemplateUrl('templates/image-modal.html', {
-				scope: $scope,
-				animation: 'slide-in-up'
-			}).then(function(modal) {
-				$scope.modal = modal;
-			});
+		'MapCtrl',
+		function($scope, $ionicModal, $ionicLoading, $http, $ionicPopup,
+				$cordovaBarcodeScanner, $state) {
+			
+		    $ionicModal.fromTemplateUrl('templates/image-modal.html', function($ionicModal) {
+		        $scope.modal = $ionicModal;
+		        console.log('oi');
+		        }, {    
+		        scope: $scope,    
+		        animation: 'slide-in-up'
+		      });
 
 			$scope.openModal = function() {
 				$scope.modal.show();
@@ -55,9 +55,12 @@ myApp
 			    });
 			
 			$scope.imageSrc = 'img/Slakje.png';
-			 
-			$scope.openModal();
+
+			      
+			    
+			setTimeout(function(){ $scope.openModal();}, 3000);
 			
+
 			function loadQuestions() {
 
 				if(localStorage['qrcodes'] == null){
@@ -335,10 +338,8 @@ myApp
 			// $scope.clickTest = function() {
 			// alert('Example of infowindow with ng-click')
 			// };
-			
-			
 
-		};
+		});
 
 myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 
