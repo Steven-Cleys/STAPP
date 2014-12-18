@@ -186,7 +186,6 @@ myApp
 					google.maps.event.addListenerOnce(map,
 							'tilesloaded', function() {
 						$ionicLoading.hide();
-						$scope.openModal();
 						
 
 						console.log("map loaded");
@@ -261,19 +260,15 @@ myApp
 
 			progress();
 			
-			$ionicModal.fromTemplateUrl('templates/login.html', {
-				scope : $scope
-			}).then(function(modal) {
-				$scope.loginModal = modal;
-			});
+			
 			
 
 			if (localStorage.getItem('logins') != null) {
 				console.log(localStorage.getItem('logins'));
 			} else {
 				console.log("its empty");
+
 				
-				$scope.loginModal.show();
 				// Create the login modal that we will use later
 
 				
@@ -530,7 +525,18 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 
 })
 
-myApp.controller('LoginCtrl', function($scope, $ionicPopup) {
+myApp.controller('LoginCtrl', function($scope, $ionicModal) {
+	
+	
+	$ionicModal.fromTemplateUrl('templates/login.html', {
+		scope : $scope
+	}).then(function(modal) {
+		$scope.loginModal = modal;
+	});
+	
+	setTimeout(function(){ $scope.loginModal.show();}, 500);
+	
+	
 
 	// Perform the login action when the user submits the login form
 	$scope.doLogin = function() {

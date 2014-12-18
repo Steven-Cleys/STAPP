@@ -21,4 +21,9 @@ angular.module('stapp', ['ionic','stapp.controllers', 'ngCordova'])
       templateUrl: "templates/question.html",
       controller: 'QuestionCtrl'     
   })
+    .state('login', {
+      url: "/login",
+      templateUrl: "templates/login.html",
+      controller: 'LoginCtrl'     
+  })
 });
