@@ -502,15 +502,15 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 
 myApp.controller('LoginCtrl', function($scope, $ionicModal) {
 	
-	
-	$ionicModal.fromTemplateUrl('templates/login.html', {
-		scope : $scope
-	}).then(function(modal) {
-		$scope.loginModal = modal;
-	});
-	
-	setTimeout(function(){ $scope.loginModal.show();}, 500);
-	
+	console.log("controller executed");
+//	$ionicModal.fromTemplateUrl('templates/login.html', {
+//		scope : $scope
+//	}).then(function(modal) {
+//		$scope.loginModal = modal;
+//	});
+//	
+//	setTimeout(function(){ $scope.loginModal.show();}, 500);
+//	
 	
 
 	// Perform the login action when the user submits the login form
@@ -519,7 +519,5 @@ myApp.controller('LoginCtrl', function($scope, $ionicModal) {
 		// Simulate a login delay. Remove this and replace with your login
 		// code if using a login system
 		localStorage.setItem('logins', JSON.stringify($scope.login));
-
-		myPopup.close();
 	};
 })
