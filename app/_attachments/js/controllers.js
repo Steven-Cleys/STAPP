@@ -23,8 +23,14 @@ function makeInfoWindowEvent(map, infowindow, marker) {
 myApp
 .controller(
 		'MapCtrl',
-		function($scope, $ionicModal, $ionicLoading, $http, $ionicPopup,
+		function($scope, $ionicModal, $ionicLoading, $http, $ionicPopup, $ionicPopover,
 				$cordovaBarcodeScanner, $state) {
+			
+			 $ionicPopover.fromTemplateUrl('info-popup.html', {
+				    scope: $scope,
+				  }).then(function(popover) {
+				    $scope.popover = popover;
+				  });
 			
 		    $ionicModal.fromTemplateUrl('templates/image-modal.html', function($ionicModal) {
 		        $scope.modal = $ionicModal;
