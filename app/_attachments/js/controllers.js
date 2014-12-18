@@ -1,7 +1,7 @@
 var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
                                                   'ionic' ])
                                                   var myPopup;
-var qrcode = "b36";
+var qrcode;
 var qrcodes =["1x9","87t","4z7","s53","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
 var ok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var nok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
@@ -9,7 +9,7 @@ var jsonarr = []; //array voor data bij te houden
 var markers = [];
 var start;
 var end;
-var startTime;
+var startTime = 10000;
 var endTime;
 
 localStorage.setItem('logins', 'amagad'); //to temporay disable logging screen for testing purposes.
@@ -23,15 +23,16 @@ function makeInfoWindowEvent(map, infowindow, marker) {
 myApp
 .controller(
 		'MapCtrl',
-		function($scope, $ionicLoading, $compile, $http, $ionicPopup,
-				$cordovaBarcodeScanner, $state, $ionicModal) {
-
-			$ionicModal.fromTemplateUrl('image-modal.html', {
-				scope: $scope,
-				animation: 'slide-in-up'
-			}).then(function(modal) {
-				$scope.modal = modal;
-			});
+		function($scope, $ionicModal, $ionicLoading, $http, $ionicPopup,
+				$cordovaBarcodeScanner, $state) {
+			
+		    $ionicModal.fromTemplateUrl('templates/image-modal.html', function($ionicModal) {
+		        $scope.modal = $ionicModal;
+		        console.log('oi');
+		        }, {    
+		        scope: $scope,    
+		        animation: 'slide-in-up'
+		      });
 
 			$scope.openModal = function() {
 				$scope.modal.show();
@@ -54,23 +55,11 @@ myApp
 			    });
 			
 			$scope.imageSrc = 'img/Slakje.png';
-			
-			$scope.showImage = function(index) {
-			      switch(index) {
-			        case 1:
-			          $scope.imageSrc = 'img/Slakje.png';
-			          break;
-			        case 2:
-			          $scope.imageSrc  = 'img/Slakje.png';
-			          break;
-			        case 3:
-			          $scope.imageSrc  = 'img/Slakje.png';
-			          break;
-			      }
+
 			      
-			    }
-			 
-			$scope.openModal();
+			    
+			setTimeout(function(){ $scope.openModal();}, 3000);
+			
 
 			function loadQuestions() {
 
