@@ -24,7 +24,53 @@ myApp
 .controller(
 		'MapCtrl',
 		function($scope, $ionicLoading, $compile, $http, $ionicPopup,
-				$cordovaBarcodeScanner, $state) {
+				$cordovaBarcodeScanner, $state, $ionicModal) {
+
+			$ionicModal.fromTemplateUrl('image-modal.html', {
+				scope: $scope,
+				animation: 'slide-in-up'
+			}).then(function(modal) {
+				$scope.modal = modal;
+			});
+
+			$scope.openModal = function() {
+				$scope.modal.show();
+			};
+
+			$scope.closeModal = function() {
+				$scope.modal.hide();
+			};
+			
+			$scope.$on('$destroy', function() {
+			      $scope.modal.remove();
+			    });
+			
+			$scope.$on('modal.hide', function() {
+			     //Execute action
+			    });
+			 
+			$scope.$on('modal.shown', function() {
+			      console.log('Modal is shown!');
+			    });
+			
+			$scope.imageSrc = 'img/Slakje.png';
+			
+			$scope.showImage = function(index) {
+			      switch(index) {
+			        case 1:
+			          $scope.imageSrc = 'img/Slakje.png';
+			          break;
+			        case 2:
+			          $scope.imageSrc  = 'img/Slakje.png';
+			          break;
+			        case 3:
+			          $scope.imageSrc  = 'img/Slakje.png';
+			          break;
+			      }
+			      
+			    }
+			 
+			$scope.openModal();
 
 			function loadQuestions() {
 
@@ -156,7 +202,7 @@ myApp
 					}
 				});
 			}
-			
+
 			progress();
 
 			if (qrcode != null){
@@ -187,7 +233,7 @@ myApp
 				else{
 					calcRoute(end,  new google.maps.LatLng(51.216126, 4.410546))
 				}
-					
+
 			}
 
 			function progress() {
@@ -219,59 +265,59 @@ myApp
 			$scope.scanBarcode = function() {
 				var found = false;
 				$cordovaBarcodeScanner
-						.scan()
-						.then(
-								function(imageData) {
-									var execute = true;
-									for (var i = 0; i < qrcodes.length; i++) {
-										if (imageData.text == qrcodes[i]) { 
-											execute = false;
-										}
-									}
-									
-									if (execute){
-									for (i = 0; i < jsonarr.length; i++) {
-										if (imageData.text == jsonarr[i].value.qrCode) {
-											qrcode = imageData.text;
-											$state.go('question');
-											console
-													.log("Barcode Format -> "
-															+ imageData.format);
-											console
-													.log("Cancelled -> "
-															+ imageData.cancelled);
-											found = true;
-											break;
-										}
+				.scan()
+				.then(
+						function(imageData) {
+							var execute = true;
+							for (var i = 0; i < qrcodes.length; i++) {
+								if (imageData.text == qrcodes[i]) { 
+									execute = false;
+								}
+							}
 
-										if (found == false && i > 8) {
-											var alertPopup;
-											alertPopup = $ionicPopup
-													.alert({
-														title : 'Ongeldige QR-Code',
-														buttons : [ {
-															text : imageData.text,
-															type : 'button-assertive'
-														} ]
-													});
-										}
+							if (execute){
+								for (i = 0; i < jsonarr.length; i++) {
+									if (imageData.text == jsonarr[i].value.qrCode) {
+										qrcode = imageData.text;
+										$state.go('question');
+										console
+										.log("Barcode Format -> "
+												+ imageData.format);
+										console
+										.log("Cancelled -> "
+												+ imageData.cancelled);
+										found = true;
+										break;
 									}
-									}else {
-										alertPopup = $ionicPopup.alert({
-											title : 'U heeft deze qrcode al gescand',
+
+									if (found == false && i > 8) {
+										var alertPopup;
+										alertPopup = $ionicPopup
+										.alert({
+											title : 'Ongeldige QR-Code',
 											buttons : [ {
-												text : 'OK',
+												text : imageData.text,
 												type : 'button-assertive'
 											} ]
 										});
 									}
-
-
-								},
-								function(error) {
-									console.log("An error happened -> "
-											+ error);
+								}
+							}else {
+								alertPopup = $ionicPopup.alert({
+									title : 'U heeft deze qrcode al gescand',
+									buttons : [ {
+										text : 'OK',
+										type : 'button-assertive'
+									} ]
 								});
+							}
+
+
+						},
+						function(error) {
+							console.log("An error happened -> "
+									+ error);
+						});
 			};
 
 
@@ -382,16 +428,16 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 				nok.push(qrcode);
 				localStorage['questionNok'] = JSON.stringify(nok);
 			}
-			
+
 			if(qrcodes.length == 1){
 				var date = new Date();
 				startTime = date.getTime();
 			}
-			
+
 			if(qrcodes.length == 10){
 				var date = new Date();
 				endTime = date.getTime();
-				
+
 				var difference = endTime-startTime;
 				var points = JSON.parse(localStorage['questionOk']).length;
 				var login = localStorage.getItem('logins');
@@ -446,7 +492,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 		console.log(window.localStorage['questionNok']);
 	}
 
-	
+
 	$scope.changeState = function() {
 		// console.log("hallo ");
 		$state.go('question');
