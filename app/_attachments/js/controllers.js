@@ -1,7 +1,7 @@
 var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
                                                   'ionic' ])
                                                   var myPopup;
-var qrcode = "b36";
+var qrcode;
 var qrcodes =["1x9","87t","4z7","s53","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
 var ok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var nok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
@@ -22,12 +22,12 @@ function makeInfoWindowEvent(map, infowindow, marker) {
 
 myApp
 .controller(
-		'MapCtrl',
-		function($scope, $ionicLoading, $compile, $http, $ionicPopup,
-				$cordovaBarcodeScanner, $state, $ionicModal) {
+		'MapCtrl', ['$scope', '$ionicModal', '$http', '$ionicLoading', '$ionicPopup',
+		'$cordovaBarcodeScanner', '$state', MapCtrl]); 
+		function MapCtrl($scope, $ionicModal, $http, $ionicLoading, $ionicPopup,
+	$cordovaBarcodeScanner, $state) {
 
-			$ionicModal.fromTemplateUrl('image-modal.html', {
-				scope: $scope,
+			$ionicModal.fromTemplateUrl('templates/image-modal.html', {
 				animation: 'slide-in-up'
 			}).then(function(modal) {
 				$scope.modal = modal;
@@ -54,24 +54,9 @@ myApp
 			    });
 			
 			$scope.imageSrc = 'img/Slakje.png';
-			
-			$scope.showImage = function(index) {
-			      switch(index) {
-			        case 1:
-			          $scope.imageSrc = 'img/Slakje.png';
-			          break;
-			        case 2:
-			          $scope.imageSrc  = 'img/Slakje.png';
-			          break;
-			        case 3:
-			          $scope.imageSrc  = 'img/Slakje.png';
-			          break;
-			      }
-			      
-			    }
 			 
 			$scope.openModal();
-
+			
 			function loadQuestions() {
 
 				if(localStorage['qrcodes'] == null){
@@ -349,8 +334,10 @@ myApp
 			// $scope.clickTest = function() {
 			// alert('Example of infowindow with ng-click')
 			// };
+			
+			
 
-		});
+		};
 
 myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 
