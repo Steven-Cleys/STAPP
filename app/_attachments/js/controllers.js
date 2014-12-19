@@ -59,8 +59,6 @@ myApp
 			
 			$scope.imageSrc = 'img/Slakje.png';
 
-			      
-
 			function loadQuestions() {
 
 				if(localStorage['qrcodes'] == null){

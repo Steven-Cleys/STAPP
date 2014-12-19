@@ -1,9 +1,13 @@
-<ion-view title="Appy Rally">
+<ion-view>
 
 	<ion-nav-bar class="bar-dark">
 	<!--<progress max="18" value="10" style="width:40%"></progress>-->
-		 <a ng-model = "progress" class="pull-left" >{{progress}}/10 </a> 
-      <a class="button button-large button-assertive icon ion-camera pull-right" ng-click="scanBarcode()"></a> <!--  href="#/question" -->
+		 <a ng-model = "progress" class="pull-left score-beauty" >{{progress}}/10 </a>
+		 
+		 <ion-pane class="transparent">
+                     <img ng-src="img/APpy.png" class="nav-image"/>
+                  </ion-pane>
+      <a class="button button-large button-assertive pull-right score-beauty" ng-click="scanBarcode()">QR</a> <!--  href="#/question" -->
     </ion-nav-bar>
     	<ion-content>
 		<div id="map" data-tap-disabled="true">
