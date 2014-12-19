@@ -235,12 +235,12 @@ myApp
 			
 			
 			
-
+			//probably not needed any more
 			if (localStorage.getItem('logins') != null) {
 				console.log(localStorage.getItem('logins'));
-			} else {
-				console.log("its empty");
-
+			} else { 
+				console.log("you shouldnt be here, go login first");
+				$state.go('login');
 				
 				// Create the login modal that we will use later
 
@@ -498,9 +498,9 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state) {
 
 })
 
-myApp.controller('LoginCtrl', function($scope, $ionicModal) {
+myApp.controller('LoginCtrl', function($scope, $ionicPopup, $state) {
 	
-	console.log("controller executed");
+	console.log("logincontroller executed");
 //	$ionicModal.fromTemplateUrl('templates/login.html', {
 //		scope : $scope
 //	}).then(function(modal) {
@@ -509,13 +509,36 @@ myApp.controller('LoginCtrl', function($scope, $ionicModal) {
 //	
 //	setTimeout(function(){ $scope.loginModal.show();}, 500);
 //	
-	
+	if (localStorage.getItem('logins') != null) {
+		console.log(localStorage.getItem('logins'));
+		$state.go('index');
+	} else {
+		console.log("no login found");
+	}
 
 	// Perform the login action when the user submits the login form
 	$scope.doLogin = function() {
+		
+		if(!$scope.login.team || !$scope.login.name || !$scope.login.email || !$scope.login.checked)
+			{
+			 $scope.showAlert = function() {
+				   var alertPopup = $ionicPopup.alert({
+				     title: 'Woops',
+						buttons : [ {
+							text : 'Controleer alle invoervelden aub',
+							type : 'button-assertive'
+						} ]
+				   });
+			}
+			 $scope.showAlert();
+			}
+		else
+			{
 		console.log('Doing login', $scope.login);
 		// Simulate a login delay. Remove this and replace with your login
 		// code if using a login system
 		localStorage.setItem('logins', JSON.stringify($scope.login));
+		$state.go('index');
+			}
 	};
 })

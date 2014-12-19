@@ -8,7 +8,7 @@
 angular.module('stapp', ['ionic','stapp.controllers', 'ngCordova'])
 
 .config(function($stateProvider, $urlRouterProvider) {
-	$urlRouterProvider.otherwise('/index');
+	$urlRouterProvider.otherwise('/login');
 	
   $stateProvider
   	.state('index', {
