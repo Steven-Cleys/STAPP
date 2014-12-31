@@ -1,8 +1,8 @@
 var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
                                                   'ionic' ])
                                                   var myPopup;
-var qrcode = "b36";
-var qrcodes =["1x9","87t","4z7","s53","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
+var qrcode; // = "b36";
+var qrcodes = []; //=["1x9","87t","4z7","s53","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
 var ok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var nok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var jsonarr = []; //array voor data bij te houden
@@ -58,6 +58,8 @@ myApp
 			    });
 			
 			$scope.imageSrc = 'img/Slakje.png';
+			
+			
 
 			function loadQuestions() {
 
@@ -65,7 +67,6 @@ myApp
 					console.log("storage");
 					localStorage['qrcodes'] = JSON.stringify(qrcodes);
 					localStorage['questionOk'] = JSON.stringify(ok);
-					localStorage['questionNok'] = JSON.stringify(nok);
 				}
 
 				$http
@@ -159,9 +160,9 @@ myApp
 					google.maps.event.addListenerOnce(map,
 							'tilesloaded', function() {
 						$ionicLoading.hide();
-						
 
 						console.log("map loaded");
+						$scope.centerOnMe();
 
 					});
 				}
@@ -191,7 +192,6 @@ myApp
 				});
 			}
 
-			progress();
 
 			if (qrcode != null){
 
@@ -320,32 +320,29 @@ myApp
 
 			// showspinner();
 
-			// $scope.centerOnMe = function() {
-			// if (!$scope.map) {
-			// return;
-			// }
-			//
-			// $scope.loading = $ionicLoading.show({
-			// content : 'Getting current location...',
-			// showBackdrop : false
-			// });
-			//
-			// navigator.geolocation.getCurrentPosition(
-			// function(pos) {
-			// $scope.map
-			// .setCenter(new google.maps.LatLng(
-			// pos.coords.latitude,
-			// pos.coords.longitude));
-			// $scope.loading.hide();
-			// }, function(error) {
-			// alert('Unable to get location: '
-			// + error.message);
-			// });
-			// };
-			//
-			// $scope.clickTest = function() {
-			// alert('Example of infowindow with ng-click')
-			// };
+			 $scope.centerOnMe = function() {
+				 console.log("center on me!");
+						if (!$scope.map) {
+							return;
+						}
+
+						$scope.loading = $ionicLoading.show({
+							content : 'Getting current location...',
+							showBackdrop : false
+						});
+
+						navigator.geolocation.getCurrentPosition(
+								function(pos) {
+									$scope.map
+											.setCenter(new google.maps.LatLng(
+													pos.coords.latitude,
+													pos.coords.longitude));
+									$scope.loading.hide();
+								}, function(error) {
+									alert('Unable to get location: '
+											+ error.message);
+								});
+					};
 
 		});
 
@@ -384,10 +381,16 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 				question.image = "img/fotosVragen/" + qrcode + ".png";
 				question.allAnswers = doc.allAnswers;
 				if (doc.allAnswers != null) {
+					//console.log(doc.allAnswers);
 					document.getElementById("multi").style.visibility = "visible";
 					document.getElementById("open").style.visibility = "hidden";
+					question.answer = doc.answer;
 				}
-				question.answer = doc.answer
+				else {
+					//console.log(doc.answerscheck);
+					question.answercheck = doc.answercheck;
+				}
+				
 			}
 		}
 		$scope.question = [ {
@@ -416,15 +419,35 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 		nok = JSON.parse(window.localStorage['questionNok']);
 		var answer = $scope.validate.answer;
 		var alertPopup;
-
+		console.log(question.answercheck);
 		if (answer != null) {
+			if (question.allAnswers != null) {
 			if (answer == question.answer) {
+				console.log("question correct");
 				ok.push(qrcode);
 				localStorage['questionOk'] = JSON.stringify(ok);
 			} else {
 				nok.push(qrcode);
 				localStorage['questionNok'] = JSON.stringify(nok);
+				console.log("question incorrect");
 			}
+			}
+			else {
+				var split = [];
+				split = question.answercheck.split(";");
+				for (var i = 0; i < split.length; i++) {
+					console.log(answer + "  " + split[i]);
+					if(answer.toLowerCase().indexOf(split[i]) > -1) {
+						console.log("question correct");
+						ok.push(qrcode);
+						localStorage['questionOk'] = JSON.stringify(ok);
+						}
+						
+				}
+				
+				
+			}
+			
 
 			if(qrcodes.length == 1){
 				var date = new Date();
@@ -438,23 +461,30 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 				var difference = endTime-startTime;
 				var points = JSON.parse(localStorage['questionOk']).length;
 				var login = localStorage.getItem('logins');
-				var sent = "{'team':" + login.team + ", 'name':" + login.name + ", 'email':" + login.email + ", 'answersOk':" + localStorage['questionOk'] + ", 'answersNok':" + localStorage['questionNok'] + ", 'points':" + points + "}";
+				var sent = '{"team":' + login.team + ', "name":' + login.name + ', "email":' + login.email + ', "answersOk":' + localStorage['questionOk'] + ', "answersNok":' + localStorage['questionNok'] + ', "points":' + points + '}';
+				var dataObj = {
+						team : login.team,
+						name : login.name,
+						email : login.email,
+						answersOk : localStorage['questionOk'],
+						points : points
+				};
 				localStorage.clear();
 				qrcodes.length = 0;
 				console.log("clear me");
 				
-				var req = {
-					       method: 'POST',
-					       url: 'http://127.0.0.1:5984/results',
-					       headers: {
-					       //'Authorization': 'stappproject'
-					         'Content-Type': "application/json"
-					       },
-					       data: { test: 'test' }
-					       }
-				$http(req);
+//				var req = {
+//					       method: 'POST',
+//					       url: 'http://127.0.0.1:5984/results',
+//					       headers: {
+//					       //'Authorization': 'stappproject'
+//					         'Content-Type': "application/json"
+//					       },
+//					       data: { test: 'test' }
+//					       }
+//				$http(req);
 				
-				//$http.post('http://127.0.0.1:5984/results', {'points': '445'});
+				$http.post('https://stapp.cloudant.com/results', dataObj);
 				
 				alertPopup = $ionicPopup.alert({
 					title : 'U heeft alle vragen beantwoord!',
@@ -462,7 +492,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 						text : difference,
 						type : 'button-assertive',
 						onTap : function() {
-							$state.go('index');
+							$state.go('login');
 						}
 					} ]
 
