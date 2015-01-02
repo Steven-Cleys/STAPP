@@ -11,6 +11,7 @@ var start;
 var end;
 var startTime = 10000; //testing
 var endTime;
+var tracker;
 
 
 localStorage.setItem('logins', 'amagad'); //to temporay disable logging screen for testing purposes.
@@ -322,39 +323,48 @@ myApp
 			// showspinner();
 
 			 $scope.centerOnMe = function() {
-				 console.log("center on me!");
+				 console.log("centered?");
 						if (!$scope.map) {
+							console.log("return?");
 							return;
 						}
 
 
 						navigator.geolocation.getCurrentPosition(
 								function(pos) {
+									console.log("getting position")
 									$scope.map
 											.setCenter(new google.maps.LatLng(
 													pos.coords.latitude,
 													pos.coords.longitude));
+									
+									var myLatlng = new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
+									
+								    tracker = new google.maps.Marker({
+								    position: myLatlng,
+								    map: $scope.map,
+								    zIndex:1
+								    });									
+									
 									track(pos);
 								}, function(error) {
-									alert('Unable to get location: '
+									console.log('Unable to get location: '
 											+ error.message);
-								});
+								},
+								 {
+							         enableHighAccuracy: true,
+							         timeout : 10000
+							    }
+						
+						);
 					};
 					
 					function track(location)
 					{
-						
-					var myLatlng = new google.maps.LatLng(location.coords.latitude,location.coords.longitude);
-
-					    var tracker = new google.maps.Marker({
-					    position: myLatlng,
-					    map: $scope.map,
-					    zIndex:1
-					    });
+					    var newLatLng = new google.maps.LatLng(location.coords.latitude,location.coords.longitude);
+					    console.log(newLatLng);
+					    tracker.setPosition(newLatLng);
 					    
-					    
-					    
-
 					//navigator.geolocation.clearWatch(watchId);
 					 console.log("location updated");
 					 }
