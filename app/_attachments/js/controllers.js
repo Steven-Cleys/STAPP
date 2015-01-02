@@ -9,8 +9,9 @@ var jsonarr = []; //array voor data bij te houden
 var markers = [];
 var start;
 var end;
-var startTime = 10000;
+var startTime = 10000; //testing
 var endTime;
+var watchId;
 
 localStorage.setItem('logins', 'amagad'); //to temporay disable logging screen for testing purposes.
 
@@ -118,13 +119,14 @@ myApp
 					var mapOptions = {
 							center : myLatlng,
 							zoom : 16,
-							mapTypeId : google.maps.MapTypeId.ROADMAP
+							mapTypeId : google.maps.MapTypeId.ROADMAP,
+							
 					};
 
 					var map = new google.maps.Map(document
 							.getElementById("map"), mapOptions);
 
-
+					watchId = navigator.geolocation.watchPosition(track); 
 
 					jsonarr = JSON
 					.parse(window.localStorage['questions']);
@@ -326,10 +328,6 @@ myApp
 							return;
 						}
 
-						$scope.loading = $ionicLoading.show({
-							content : 'Getting current location...',
-							showBackdrop : false
-						});
 
 						navigator.geolocation.getCurrentPosition(
 								function(pos) {
@@ -337,12 +335,29 @@ myApp
 											.setCenter(new google.maps.LatLng(
 													pos.coords.latitude,
 													pos.coords.longitude));
-									$scope.loading.hide();
+									track(pos);
 								}, function(error) {
 									alert('Unable to get location: '
 											+ error.message);
 								});
 					};
+					
+					function track(location)
+					{
+					var myLatlng = new google.maps.LatLng(location.coords.latitude,location.coords.longitude);
+
+					    var tracker = new google.maps.Marker({
+					    position: myLatlng,
+					    map: $scope.map,
+					    zIndex:1
+					    });
+					    
+					    
+					    
+
+					navigator.geolocation.clearWatch(watchId);
+
+					 }
 
 		});
 
