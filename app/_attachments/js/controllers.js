@@ -26,9 +26,17 @@ myApp
 .controller(
 		'MapCtrl',
 		function($scope, $ionicModal, $ionicLoading, $http, $ionicPopup, $ionicPopover,
-				$cordovaBarcodeScanner, $state) {
+				$cordovaBarcodeScanner, $state, $ionicPlatform) {
 			
-			
+			  $ionicPlatform.registerBackButtonAction(function (event) {
+				  console.log($state.current.name);
+				    if($state.current.name=="index"){
+				      navigator.app.exitApp();
+				    }
+				    else {
+				      navigator.app.backHistory();
+				    }
+				  }, 100);
 			
 			
 		    $ionicModal.fromTemplateUrl('templates/image-modal.html', function($ionicModal) {
@@ -243,7 +251,14 @@ myApp
 
 			function progress() {
 
-				var progress  = qrcodes.length;
+				var progress;
+				if (qrcodes.length == 0) {
+					progress = 0;					
+				}
+				else {
+					progress = qrcodes.length;
+				}
+				
 				$scope.progress = progress;
 				console.log(progress);
 			}
