@@ -19,7 +19,10 @@ localStorage.setItem('logins', 'amagad'); //to temporay disable logging screen f
 function makeInfoWindowEvent(map, infowindow, marker) {
 	return function() {
 		infowindow.open(map, marker);
+		
 	};
+	
+	
 }
 
 myApp
@@ -27,25 +30,25 @@ myApp
 		'MapCtrl',
 		function($scope, $ionicModal, $ionicLoading, $http, $ionicPopup, $ionicPopover,
 				$cordovaBarcodeScanner, $state, $ionicPlatform) {
-			
-			  $ionicPlatform.registerBackButtonAction(function (event) {
-				  console.log($state.current.name);
-				    if($state.current.name=="index"){
-				      navigator.app.exitApp();
-				    }
-				    else {
-				      navigator.app.backHistory();
-				    }
-				  }, 100);
-			
-			
-		    $ionicModal.fromTemplateUrl('templates/image-modal.html', function($ionicModal) {
-		        $scope.modal = $ionicModal;
-		        console.log('oi');
-		        }, {    
-		        scope: $scope,    
-		        animation: 'slide-in-up'
-		      });
+
+			$ionicPlatform.registerBackButtonAction(function (event) {
+				console.log($state.current.name);
+				if($state.current.name=="index"){
+					navigator.app.exitApp();
+				}
+				else {
+					navigator.app.backHistory();
+				}
+			}, 100);
+
+
+			$ionicModal.fromTemplateUrl('templates/image-modal.html', function($ionicModal) {
+				$scope.modal = $ionicModal;
+				console.log('oi');
+			}, {    
+				scope: $scope,    
+				animation: 'slide-in-up'
+			});
 
 			$scope.openModal = function() {
 				$scope.modal.show();
@@ -54,22 +57,22 @@ myApp
 			$scope.closeModal = function() {
 				$scope.modal.hide();
 			};
-			
+
 			$scope.$on('$destroy', function() {
-			      $scope.modal.remove();
-			    });
-			
+				$scope.modal.remove();
+			});
+
 			$scope.$on('modal.hide', function() {
-			     //Execute action
-			    });
-			 
+				//Execute action
+			});
+
 			$scope.$on('modal.shown', function() {
-			      console.log('Modal is shown!');
-			    });
-			
+				console.log('Modal is shown!');
+			});
+
 			$scope.imageSrc = 'img/Slakje.png';
-			
-			
+
+
 
 			function loadQuestions() {
 
@@ -107,7 +110,7 @@ myApp
 			loadQuestions();
 			// }
 
-			
+
 			function initialize() {
 				directionsDisplay = new google.maps.DirectionsRenderer({polylineOptions: {
 					strokeColor: "red",
@@ -130,7 +133,7 @@ myApp
 							center : myLatlng,
 							zoom : 16,
 							mapTypeId : google.maps.MapTypeId.ROADMAP,
-							
+
 					};
 
 					var map = new google.maps.Map(document
@@ -203,15 +206,15 @@ myApp
 						directionsDisplay.setDirections(response);
 						console.log(end);
 						new google.maps.Marker({
-							 map: $scope.map,
-							  position: end,
-							  icon: 'img/icon/symbol_inter1.png',
-							  clickable: false
-							 });
-						
+							map: $scope.map,
+							position: end,
+							icon: 'img/icon/symbol_inter1.png',
+							clickable: false
+						});
+
 					}
 				});
-				
+
 			}
 
 
@@ -239,9 +242,9 @@ myApp
 						}
 					}
 					calcRoute(start,end);
-					
-					
-					
+
+
+
 				}
 				else{
 					calcRoute(end,  new google.maps.LatLng(51.216126, 4.410546))
@@ -258,29 +261,29 @@ myApp
 				else {
 					progress = qrcodes.length;
 				}
-				
+
 				$scope.progress = progress;
 				console.log(progress);
 			}
 
 			progress();
-			
-			
-			
+
+
+
 			//probably not needed any more
 			if (localStorage.getItem('logins') != null) {
 				console.log(localStorage.getItem('logins'));
 			} else { 
 				console.log("you shouldnt be here, go login first");
 				$state.go('login');
-				
+
 				// Create the login modal that we will use later
 
-				
-				
+
+
 //				myPopup = $ionicPopup.show({
-//					templateUrl : 'templates/login.html',
-//					scope : $scope
+//				templateUrl : 'templates/login.html',
+//				scope : $scope
 //				});
 			}
 
@@ -348,57 +351,71 @@ myApp
 									+ error);
 						});
 			};
-			
+
 			// showspinner();
 
-			 $scope.centerOnMe = function() {
-				 console.log("centered?");
-						if (!$scope.map) {
-							console.log("return?");
-							return;
+			$scope.centerOnMe = function() {
+				console.log("centered?");
+				if (!$scope.map) {
+					console.log("return?");
+					return;
+				}
+
+
+				navigator.geolocation.getCurrentPosition(
+						function(pos) {
+							console.log("getting position")
+							$scope.map
+							.setCenter(new google.maps.LatLng(
+									pos.coords.latitude,
+									pos.coords.longitude));
+
+							var myLatlng = new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
+
+							tracker = new google.maps.Marker({
+								position: myLatlng,
+								map: $scope.map,
+								zIndex:1,
+								icon: 'img/icon/you-are-here-2.png'
+							});									
+
+							track(pos);
+						}, function(error) {
+							console.log('Unable to get location: '
+									+ error.message);
+						},
+						{
+							enableHighAccuracy: true,
+							timeout : 10000
 						}
 
+				);
+			};
 
-						navigator.geolocation.getCurrentPosition(
-								function(pos) {
-									console.log("getting position")
-									$scope.map
-											.setCenter(new google.maps.LatLng(
-													pos.coords.latitude,
-													pos.coords.longitude));
-									
-									var myLatlng = new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
-									
-								    tracker = new google.maps.Marker({
-								    position: myLatlng,
-								    map: $scope.map,
-								    zIndex:1,
-								    icon: 'img/icon/you-are-here-2.png'
-								    });									
-									
-									track(pos);
-								}, function(error) {
-									console.log('Unable to get location: '
-											+ error.message);
-								},
-								 {
-							         enableHighAccuracy: true,
-							         timeout : 10000
-							    }
-						
-						);
-					};
-					
-					function track(location)
-					{
-					    var newLatLng = new google.maps.LatLng(location.coords.latitude,location.coords.longitude);
-					    console.log(newLatLng);
-					    tracker.setPosition(newLatLng);
-					    
-					//navigator.geolocation.clearWatch(watchId);
-					 console.log("location updated");
-					 }
+			function track(location)
+			{
+				var newLatLng = new google.maps.LatLng(location.coords.latitude,location.coords.longitude);
+				console.log(newLatLng);
+				tracker.setPosition(newLatLng);
 
+				//navigator.geolocation.clearWatch(watchId);
+				console.log("location updated");
+			}
+
+			$scope.takePhoto = function() {
+				navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+					destinationType: Camera.DestinationType.DATA_URL
+				});
+
+				function onSuccess(imageData) {
+					var image = document.getElementById('myImage');
+					image.src = "data:image/jpeg;base64," + imageData;
+				}
+
+				function onFail(message) {
+					alert('Failed because: ' + message);
+				}
+			}
 		});
 
 myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
@@ -445,7 +462,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 					//console.log(doc.answerscheck);
 					question.answercheck = doc.answercheck;
 				}
-				
+
 			}
 		}
 		$scope.question = [ {
@@ -477,15 +494,15 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 		console.log(question.answercheck);
 		if (answer != null) {
 			if (question.allAnswers != null) {
-			if (answer == question.answer) {
-				console.log("question correct");
-				ok.push(qrcode);
-				localStorage['questionOk'] = JSON.stringify(ok);
-			} else {
-				nok.push(qrcode);
-				localStorage['questionNok'] = JSON.stringify(nok);
-				console.log("question incorrect");
-			}
+				if (answer == question.answer) {
+					console.log("question correct");
+					ok.push(qrcode);
+					localStorage['questionOk'] = JSON.stringify(ok);
+				} else {
+					nok.push(qrcode);
+					localStorage['questionNok'] = JSON.stringify(nok);
+					console.log("question incorrect");
+				}
 			}
 			else {
 				var split = [];
@@ -496,13 +513,13 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 						console.log("question correct");
 						ok.push(qrcode);
 						localStorage['questionOk'] = JSON.stringify(ok);
-						}
-						
+					}
+
 				}
-				
-				
+
+
 			}
-			
+
 
 			if(qrcodes.length == 1){
 				var date = new Date();
@@ -527,20 +544,20 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 				localStorage.clear();
 				qrcodes.length = 0;
 				console.log("clear me");
-				
+
 //				var req = {
-//					       method: 'POST',
-//					       url: 'http://127.0.0.1:5984/results',
-//					       headers: {
-//					       //'Authorization': 'stappproject'
-//					         'Content-Type': "application/json"
-//					       },
-//					       data: { test: 'test' }
-//					       }
+//				method: 'POST',
+//				url: 'http://127.0.0.1:5984/results',
+//				headers: {
+//				//'Authorization': 'stappproject'
+//				'Content-Type': "application/json"
+//				},
+//				data: { test: 'test' }
+//				}
 //				$http(req);
-				
+
 				$http.post('https://stapp.cloudant.com/results', dataObj);
-				
+
 				alertPopup = $ionicPopup.alert({
 					title : 'U heeft alle vragen beantwoord!',
 					buttons : [ {
@@ -598,16 +615,16 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 })
 
 myApp.controller('LoginCtrl', function($scope, $ionicPopup, $state) {
-	
+
 	console.log("logincontroller executed");
 //	$ionicModal.fromTemplateUrl('templates/login.html', {
-//		scope : $scope
+//	scope : $scope
 //	}).then(function(modal) {
-//		$scope.loginModal = modal;
+//	$scope.loginModal = modal;
 //	});
-//	
+
 //	setTimeout(function(){ $scope.loginModal.show();}, 500);
-//	
+
 	if (localStorage.getItem('logins') != null) {
 		console.log(localStorage.getItem('logins'));
 		$state.go('index');
@@ -617,27 +634,27 @@ myApp.controller('LoginCtrl', function($scope, $ionicPopup, $state) {
 
 	// Perform the login action when the user submits the login form
 	$scope.doLogin = function() {
-		
+
 		if(!$scope.login.team || !$scope.login.name || !$scope.login.email || !$scope.login.checked)
-			{
-			 $scope.showAlert = function() {
-				   var alertPopup = $ionicPopup.alert({
-				     title: 'Woops',
-						buttons : [ {
-							text : 'Controleer alle invoervelden aub',
-							type : 'button-assertive'
-						} ]
-				   });
+		{
+			$scope.showAlert = function() {
+				var alertPopup = $ionicPopup.alert({
+					title: 'Woops',
+					buttons : [ {
+						text : 'Controleer alle invoervelden aub',
+						type : 'button-assertive'
+					} ]
+				});
 			}
-			 $scope.showAlert();
-			}
+			$scope.showAlert();
+		}
 		else
-			{
-		console.log('Doing login', $scope.login);
-		// Simulate a login delay. Remove this and replace with your login
-		// code if using a login system
-		localStorage.setItem('logins', JSON.stringify($scope.login));
-		$state.go('index');
-			}
+		{
+			console.log('Doing login', $scope.login);
+			// Simulate a login delay. Remove this and replace with your login
+			// code if using a login system
+			localStorage.setItem('logins', JSON.stringify($scope.login));
+			$state.go('index');
+		}
 	};
 })
