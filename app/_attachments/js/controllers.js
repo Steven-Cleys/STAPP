@@ -12,18 +12,32 @@ var end;
 var startTime = 10000; //testing
 var endTime;
 var tracker;
+var infowindows = [];
 
 
 localStorage.setItem('logins', 'amagad'); //to temporay disable logging screen for testing purposes.
 
 function makeInfoWindowEvent(map, infowindow, marker) {
+
 	return function() {
+		google.maps.event.addListener(infowindow, 'domready', function(){
+			console.log("infow loaded");
+		    $(".gm-style-iw").next("div").hide();
+		});
+		killBoxes();
 		infowindow.open(map, marker);
 		
 	};
 	
 	
 }
+
+function killBoxes() {
+	console.log("kill da box");
+    for (var i = 0; i < infowindows.length; i++ ) {  //I assume you have your infoboxes in some array
+    	infowindows[i].close();
+    }
+	}
 
 myApp
 .controller(
@@ -162,6 +176,8 @@ myApp
 							content : spot.value.hotspot + "<br>"
 							+ spot.value.adres
 						});
+						infowindows.push(infowindow);
+						
 						console.log(spot.value.adres);
 						marker.setMap(map);
 						google.maps.event.addListener(marker, 'click',
@@ -170,6 +186,12 @@ myApp
 
 						markers.push(marker);
 					}
+					
+					google.maps.event.addListener(map, "click", function(event) {
+						killBoxes();
+					});
+					
+
 
 					$scope.map = map;
 
@@ -187,6 +209,7 @@ myApp
 				directionsDisplay.setMap(map);
 
 			}
+
 
 			initialize();
 
