@@ -1,7 +1,7 @@
 var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
                                                   'ionic' ])
                                                   var myPopup;
-var qrcode = "b36";
+var qrcode; // = "b36";
 var qrcodes = []; //=["1x9","87t","4z7","s53","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
 var ok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var nok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
@@ -14,8 +14,6 @@ var endTime;
 
 
 localStorage.setItem('logins', 'amagad'); //to temporay disable logging screen for testing purposes.
-
-
 
 function makeInfoWindowEvent(map, infowindow, marker) {
 	return function() {
@@ -105,11 +103,7 @@ myApp
 					strokeColor: "red",
 					strokeOpacity:0.5,
 					strokeWeight: 6
-				}}//,
-				//{suppressMarkers: true}
-				);
-				
-				
+				}});
 				if (window.localStorage['questions'] == null) {
 					setTimeout(function() {
 						initialize();
@@ -146,8 +140,7 @@ myApp
 							map : map,
 							position : myLatLng,
 							title : spot.value.hotspot,
-							id: spot.value.qrCode,
-							icon: 'img/icon/symbol_inter.png'
+							id: spot.value.qrCode
 						});
 						console.log(marker.id);
 
@@ -185,31 +178,10 @@ myApp
 
 			var directionsDisplay;
 			var directionsService = new google.maps.DirectionsService();
-			
-			/*function makeMarker( position, icon) {
-				 new google.maps.Marker({
-				  position: position,
-				  map: map,
-				  icon: icon
-				 });
-				}
-
-			var icons = {
-					  begin: new google.maps.MarkerImage(
-					   // URL
-					   'img/icon/you-are-here-2.png'
-					  ),
-					  einde: new google.maps.MarkerImage(
-					   // URL
-					   'img/icon/symbol_inter1.png'
-					  )
-					 };*/
 
 			function calcRoute(start,end) {
 				var startje = new google.maps.LatLng(start.k, start.B);
-				//makeMarker(startje, icons.begin);
 				var endje =  new google.maps.LatLng(end.k, end.B);
-				//makeMarker(endje, icons.einde);
 				var request = {
 						origin:start,
 						destination:end,
@@ -377,8 +349,7 @@ myApp
 					    var tracker = new google.maps.Marker({
 					    position: myLatlng,
 					    map: $scope.map,
-					    zIndex:1,
-					    icon: 'img/icon/you-are-here-2.png'
+					    zIndex:1
 					    });
 					    
 					    
