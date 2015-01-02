@@ -11,7 +11,7 @@ var start;
 var end;
 var startTime = 10000; //testing
 var endTime;
-var watchId;
+
 
 localStorage.setItem('logins', 'amagad'); //to temporay disable logging screen for testing purposes.
 
@@ -126,7 +126,7 @@ myApp
 					var map = new google.maps.Map(document
 							.getElementById("map"), mapOptions);
 
-					watchId = navigator.geolocation.watchPosition(track); 
+					var watchId = navigator.geolocation.watchPosition(track); 
 
 					jsonarr = JSON
 					.parse(window.localStorage['questions']);
@@ -318,8 +318,7 @@ myApp
 									+ error);
 						});
 			};
-
-
+			
 			// showspinner();
 
 			 $scope.centerOnMe = function() {
@@ -344,6 +343,7 @@ myApp
 					
 					function track(location)
 					{
+						
 					var myLatlng = new google.maps.LatLng(location.coords.latitude,location.coords.longitude);
 
 					    var tracker = new google.maps.Marker({
@@ -355,8 +355,8 @@ myApp
 					    
 					    
 
-					navigator.geolocation.clearWatch(watchId);
-
+					//navigator.geolocation.clearWatch(watchId);
+					 console.log("location updated");
 					 }
 
 		});
