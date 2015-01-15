@@ -1,7 +1,7 @@
 var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
                                                   'ionic' ])
                                                   var myPopup;
-var qrcode = "b36";
+var qrcode; // = "b36";
 var qrcodes = []; //=["1x9","87t","4z7","s53","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
 var ok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var nok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
@@ -15,7 +15,7 @@ var tracker;
 var infowindows = [];
 
 
-localStorage.setItem('logins', 'amagad'); //to temporay disable logging screen for testing purposes.
+//localStorage.setItem('logins', 'amagad'); //to temporay disable logging screen for testing purposes.
 
 function makeInfoWindowEvent(map, infowindow, marker) {
 
@@ -28,8 +28,6 @@ function makeInfoWindowEvent(map, infowindow, marker) {
 		infowindow.open(map, marker);
 		
 	};
-	
-	
 }
 
 function killBoxes() {
@@ -45,7 +43,7 @@ myApp
 		function($scope, $ionicModal, $ionicLoading, $http, $ionicPopup, $ionicPopover,
 				$cordovaBarcodeScanner, $state, $ionicPlatform) {
 
-			$ionicPlatform.registerBackButtonAction(function (event) {
+			$ionicPlatform.registerBackButtonAction(function (event) {  //exits the app when back button is pressed
 				console.log($state.current.name);
 				if($state.current.name=="index"){
 					navigator.app.exitApp();
@@ -86,7 +84,14 @@ myApp
 
 			$scope.imageSrc = 'img/Slakje.png';
 
+			showspinner();
 
+			// if (window.localStorage['questions'] == null) {
+			loadQuestions();
+			// }
+			initialize();
+			progress();
+			
 
 			function loadQuestions() {
 
@@ -117,12 +122,6 @@ myApp
 						}
 
 			}
-
-			showspinner();
-
-			// if (window.localStorage['questions'] == null) {
-			loadQuestions();
-			// }
 
 
 			function initialize() {
@@ -211,8 +210,6 @@ myApp
 			}
 
 
-			initialize();
-
 			var directionsDisplay;
 			var directionsService = new google.maps.DirectionsService();
 
@@ -289,7 +286,7 @@ myApp
 				console.log(progress);
 			}
 
-			progress();
+
 
 
 
@@ -654,6 +651,8 @@ myApp.controller('LoginCtrl', function($scope, $ionicPopup, $state) {
 	} else {
 		console.log("no login found");
 	}
+	
+	$scope.options = ['Nederlands','English']; 
 
 	// Perform the login action when the user submits the login form
 	$scope.doLogin = function() {

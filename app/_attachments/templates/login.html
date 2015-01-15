@@ -5,11 +5,9 @@
 		<div class="list">
 			<br>
 			<label class="item item-input item-select">
-				<div class="input-label">Taal</div> <select>
-					<option selected>Nederlands</option>
-					<option>English</option>
-			</select>
+				<div class="input-label">Taal</div><select ng-init="login.lan = options[0]" ng-model="login.lan" ng-options="o as o for o in options"></select>
 			</label>
+			
 			<br>
 
 			<ion-radio ng-model="login.team" ng-value="'ind'">Individueel</ion-radio>
