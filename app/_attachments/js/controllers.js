@@ -582,7 +582,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 				alertPopup = $ionicPopup.alert({
 					title : 'U heeft alle vragen beantwoord!',
 					buttons : [ {
-						text : login,
+						text : Ok,
 						type : 'button-assertive',
 						onTap : function() {
 							$state.go('login');
