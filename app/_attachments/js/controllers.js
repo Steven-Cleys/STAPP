@@ -2,14 +2,14 @@ var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
                                                   'ionic' ])
                                                   var myPopup;
 var qrcode; // = "b36";
-var qrcodes = []; //=["1x9","87t","4z7","s53","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
+var qrcodes = []; // =["1x9","87t","4z7","s53","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
 var ok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var nok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var jsonarr = []; //array voor data bij te houden
 var markers = [];
 var start;
 var end;
-var startTime = 10000; //testing
+var startTime; // = 10000; //testing
 var endTime;
 var tracker;
 var infowindows = [];
@@ -552,12 +552,13 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 
 				var difference = endTime-startTime;
 				var points = JSON.parse(localStorage['questionOk']).length;
-				var login = localStorage.getItem('logins');
+				var login = JSON.parse(localStorage.getItem('logins'));
 				var sent = '{"team":' + login.team + ', "name":' + login.name + ', "email":' + login.email + ', "answersOk":' + localStorage['questionOk'] + ', "answersNok":' + localStorage['questionNok'] + ', "points":' + points + '}';
 				var dataObj = {
 						team : login.team,
 						name : login.name,
 						email : login.email,
+						time: difference,
 						answersOk : localStorage['questionOk'],
 						points : points
 				};
@@ -581,7 +582,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 				alertPopup = $ionicPopup.alert({
 					title : 'U heeft alle vragen beantwoord!',
 					buttons : [ {
-						text : difference,
+						text : login,
 						type : 'button-assertive',
 						onTap : function() {
 							$state.go('login');
@@ -634,7 +635,15 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 
 })
 
-myApp.controller('LoginCtrl', function($scope, $ionicPopup, $state) {
+myApp.controller('LoginCtrl', function($scope, $ionicPopup, $state, $ionicPlatform) {
+	
+	
+	$ionicPlatform.registerBackButtonAction(function (event) {  //exits the app when back button is pressed
+		
+			navigator.app.exitApp();
+
+	}, 100);
+
 
 	console.log("logincontroller executed");
 //	$ionicModal.fromTemplateUrl('templates/login.html', {
