@@ -7,7 +7,7 @@ var ok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var nok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var jsonarr = []; //array voor data bij te houden
 var markers = [];
-var start;
+var start; //voor routes
 var end;
 var startTime; // = 10000; //testing
 var endTime;
@@ -32,10 +32,12 @@ function makeInfoWindowEvent(map, infowindow, marker) {
 
 function killBoxes() {
 	console.log("kill da box");
-    for (var i = 0; i < infowindows.length; i++ ) {  //I assume you have your infoboxes in some array
+    for (var i = 0; i < infowindows.length; i++ ) { 
     	infowindows[i].close();
     }
 	}
+
+
 
 myApp
 .controller(
@@ -104,7 +106,7 @@ myApp
 
 				$http
 				.jsonp(
-				'http://stapp.cloudant.com/ap/_design/views/_view/questions?callback=JSON_CALLBACK')
+				'https://stapp.cloudant.com/ap/_design/views/_view/questions?callback=JSON_CALLBACK')
 				.then(
 
 						function(resp) {
@@ -152,7 +154,7 @@ myApp
 					var map = new google.maps.Map(document
 							.getElementById("map"), mapOptions);
 
-					var watchId = navigator.geolocation.watchPosition(track); 
+					//var watchId = navigator.geolocation.watchPosition(track); 
 
 					jsonarr = JSON
 					.parse(window.localStorage['questions']);
@@ -199,7 +201,13 @@ myApp
 						$ionicLoading.hide();
 
 						console.log("map loaded");
-						$scope.centerOnMe();
+						setGeolocation();
+
+						window.setInterval( function () {
+						        setGeolocation();
+						    }, 
+						    15000 //check every 15 seconds
+						);
 
 					});
 				}
@@ -238,7 +246,7 @@ myApp
 			}
 
 
-			if (qrcode != null){
+			if (qrcode != null) {
 
 
 				if(qrcodes.length != 10)
@@ -286,33 +294,19 @@ myApp
 				console.log(progress);
 			}
 
-
-
-
-
 			//probably not needed any more
 			if (localStorage.getItem('logins') != null) {
 				console.log(localStorage.getItem('logins'));
 			} else { 
 				console.log("you shouldnt be here, go login first");
 				$state.go('login');
-
-				// Create the login modal that we will use later
-
-
-
-//				myPopup = $ionicPopup.show({
-//				templateUrl : 'templates/login.html',
-//				scope : $scope
-//				});
 			}
 
 			function showspinner() {
 				$ionicLoading.show({
 					template : '<i class="icon ion-loading-a"></i>'
 				});
-			}
-			;
+			}			;
 
 			$scope.scanBarcode = function() {
 				var found = false;
@@ -373,6 +367,8 @@ myApp
 			};
 
 			// showspinner();
+			
+			
 
 			$scope.centerOnMe = function() {
 				console.log("centered?");
@@ -411,9 +407,55 @@ myApp
 
 				);
 			};
+			
+			
+			function setGeolocation() {
+				
+			    var geolocation = window.navigator.geolocation.watchPosition( 
+			        function ( pos ) {
+
+			            
+						var myLatlng = new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
+			            
+
+											
+														            if (typeof tracker === 'undefined') {
+												tracker = new google.maps.Marker(
+														{
+															position : myLatlng,
+															map : $scope.map,
+															zIndex : 1,
+															icon : 'img/icon/you-are-here-2.png'
+														});
+												$scope.map.setCenter(myLatlng);
+												console.log("tracker created")
+											} else {
+												console.log("tracker updated " + myLatlng)
+												tracker.setPosition(myLatlng);
+											}
+			            
+	
+			            
+			        },
+			        function () { /* error */ }, {
+			            maximumAge: 250, 
+			            enableHighAccuracy: true
+			        } 
+			    );
+
+			    window.setTimeout( function () {
+			            window.navigator.geolocation.clearWatch( geolocation ) 
+			        }, 
+			        5000 //stop checking after 5 seconds
+			    );
+			};
 
 			function track(location)
 			{
+				
+				
+				
+				
 				var newLatLng = new google.maps.LatLng(location.coords.latitude,location.coords.longitude);
 				console.log(newLatLng);
 				tracker.setPosition(newLatLng);
