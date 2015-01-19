@@ -1,6 +1,6 @@
 var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
-                                                  'ionic' ])
-                                                  var myPopup;
+                                                  'ionic' ]);
+var myPopup;
 var qrcode; // = "b36";
 var qrcodes = []; // =["1x9","87t","4z7","s53","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
 var ok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
@@ -48,7 +48,7 @@ myApp
 			$ionicPlatform.registerBackButtonAction(function (event) {  //exits the app when back button is pressed
 				console.log($state.current.name);
 				if($state.current.name=="index"){
-					navigator.app.exitApp();
+					ionic.Platform.exitApp();
 				}
 				else {
 					navigator.app.backHistory();
@@ -93,6 +93,15 @@ myApp
 			// }
 			initialize();
 			progress();
+			
+			//probably not needed any more
+			if (localStorage.getItem('logins') != null) {
+				console.log(localStorage.getItem('logins'));
+			} else { 
+				console.log("you shouldnt be here, go login first");
+				$state.go('login');
+			}
+
 			
 
 			function loadQuestions() {
@@ -157,7 +166,7 @@ myApp
 					//var watchId = navigator.geolocation.watchPosition(track); 
 
 					jsonarr = JSON
-					.parse(window.localStorage['questions']);
+					.parse(window.localStorage['questions']);  //load markers from array
 					for (i = 0; i < jsonarr.length; i++) {
 
 						var spot = jsonarr[i];
@@ -189,7 +198,7 @@ myApp
 					}
 					
 					google.maps.event.addListener(map, "click", function(event) {
-						killBoxes();
+						killBoxes(); //kill info boxes
 					});
 					
 
@@ -198,22 +207,23 @@ myApp
 
 					google.maps.event.addListenerOnce(map,
 							'tilesloaded', function() {
-						$ionicLoading.hide();
+						$ionicLoading.hide(); //hide spinner after loading
 
 						console.log("map loaded");
+						
 						setGeolocation();
 
 						window.setInterval( function () {
 						        setGeolocation();
 						    }, 
-						    15000 //check every 15 seconds
+						    15000 //check gps every 15 seconds
 						);
 
 					});
 				}
 				;
 
-				directionsDisplay.setMap(map);
+				directionsDisplay.setMap(map); //bind directions on map
 
 			}
 
@@ -275,7 +285,12 @@ myApp
 
 				}
 				else{
-					calcRoute(end,  new google.maps.LatLng(51.216126, 4.410546))
+					setTimeout(function() {
+					calcRoute(end,  new google.maps.LatLng(51.216126, 4.410546));
+					localStorage.clear();
+					qrcodes.length = 0;
+					console.log("clear me");
+					},100);
 				}
 
 			}
@@ -294,13 +309,6 @@ myApp
 				console.log(progress);
 			}
 
-			//probably not needed any more
-			if (localStorage.getItem('logins') != null) {
-				console.log(localStorage.getItem('logins'));
-			} else { 
-				console.log("you shouldnt be here, go login first");
-				$state.go('login');
-			}
 
 			function showspinner() {
 				$ionicLoading.show({
@@ -586,11 +594,13 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 			if(qrcodes.length == 1){
 				var date = new Date();
 				startTime = date.getTime();
+				localStorage.setItem('starttime', startTime);
 			}
 
 			if(qrcodes.length == 10){
 				var date = new Date();
 				endTime = date.getTime();
+				startTime = localStorage.getItem('starttime');
 
 				var difference = endTime-startTime;
 				var points = JSON.parse(localStorage['questionOk']).length;
@@ -604,9 +614,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 						answersOk : localStorage['questionOk'],
 						points : points
 				};
-				localStorage.clear();
-				qrcodes.length = 0;
-				console.log("clear me");
+
 
 //				var req = {
 //				method: 'POST',
@@ -624,7 +632,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 				alertPopup = $ionicPopup.alert({
 					title : 'U heeft alle vragen beantwoord!',
 					buttons : [ {
-						text : Ok,
+						text : 'Ok',
 						type : 'button-assertive',
 						onTap : function() {
 							$state.go('login');
@@ -640,6 +648,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 						text : 'OK',
 						type : 'button-assertive',
 						onTap : function() {
+							localStorage.setItem('qrcode', qrcode);
 							$state.go('index');
 						}
 					} ]
@@ -664,8 +673,6 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 				});
 			}
 		}
-		console.log(window.localStorage['questionOk']);
-		console.log(window.localStorage['questionNok']);
 	}
 
 
@@ -682,7 +689,7 @@ myApp.controller('LoginCtrl', function($scope, $ionicPopup, $state, $ionicPlatfo
 	
 	$ionicPlatform.registerBackButtonAction(function (event) {  //exits the app when back button is pressed
 		
-			navigator.app.exitApp();
+		ionic.Platform.exitApp();
 
 	}, 100);
 
@@ -698,6 +705,10 @@ myApp.controller('LoginCtrl', function($scope, $ionicPopup, $state, $ionicPlatfo
 
 	if (localStorage.getItem('logins') != null) {
 		console.log(localStorage.getItem('logins'));
+		if (localStorage.getItem('qrcode') != null)
+		qrcode = localStorage.getItem('qrcode'); //load qrcode to calculate route when app crashed/restarted
+		if (localStorage.getItem('qrcodes') != null)
+		qrcodes = JSON.parse(localStorage['qrcodes']); //load qrcodes to calculate progress when app crashed/restarted
 		$state.go('index');
 	} else {
 		console.log("no login found");
