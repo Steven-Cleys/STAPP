@@ -13,6 +13,7 @@ var startTime; // = 10000; //testing
 var endTime;
 var tracker;
 var infowindows = [];
+var gpsinterval; // this var stores the gps update interval function
 
 
 //localStorage.setItem('logins', 'amagad'); //to temporay disable logging screen for testing purposes.
@@ -20,6 +21,7 @@ var infowindows = [];
 function makeInfoWindowEvent(map, infowindow, marker) {
 
 	return function() {
+		
 		google.maps.event.addListener(infowindow, 'domready', function(){
 			console.log("infow loaded");
 		    $(".gm-style-iw").next("div").hide();
@@ -48,6 +50,7 @@ myApp
 			$ionicPlatform.registerBackButtonAction(function (event) {  //exits the app when back button is pressed
 				console.log($state.current.name);
 				if($state.current.name=="index"){
+					clearInterval(gpsinterval);
 					ionic.Platform.exitApp();
 				}
 				else {
@@ -86,6 +89,7 @@ myApp
 
 			$scope.imageSrc = 'img/Slakje.png';
 
+			tracker = undefined;
 			showspinner();
 
 			// if (window.localStorage['questions'] == null) {
@@ -213,7 +217,7 @@ myApp
 						
 						setGeolocation();
 
-						window.setInterval( function () {
+						gpsinterval = window.setInterval( function () {
 						        setGeolocation();
 						    }, 
 						    15000 //check gps every 15 seconds
@@ -286,8 +290,8 @@ myApp
 				}
 				else{
 					setTimeout(function() {
-					calcRoute(end,  new google.maps.LatLng(51.216126, 4.410546));
-					localStorage.clear();
+					calcRoute(end,  new google.maps.LatLng(51.216126, 4.410546)); //directions to school
+					localStorage.clear(); //clear all localstorage game is done
 					qrcodes.length = 0;
 					console.log("clear me");
 					},100);
@@ -333,6 +337,8 @@ myApp
 								for (i = 0; i < jsonarr.length; i++) {
 									if (imageData.text == jsonarr[i].value.qrCode) {
 										qrcode = imageData.text;
+										clearInterval(gpsinterval);
+										tracker = undefined;
 										$state.go('question');
 										console
 										.log("Barcode Format -> "
@@ -489,7 +495,7 @@ myApp
 		});
 
 myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
-
+	
 	jsonarr = JSON.parse(localStorage['questions']);
 	var execute = true;
 	var valid = false;
@@ -510,8 +516,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 	}
 
 	if(execute){
-		qrcodes.push(qrcode);
-		localStorage['qrcodes'] = JSON.stringify(qrcodes);
+
 		var question = {};
 
 		for (var i = 0; i < jsonarr.length; i++) {
@@ -648,6 +653,8 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 						text : 'OK',
 						type : 'button-assertive',
 						onTap : function() {
+							qrcodes.push(qrcode);
+							localStorage['qrcodes'] = JSON.stringify(qrcodes); //storage the filled in question
 							localStorage.setItem('qrcode', qrcode);
 							$state.go('index');
 						}
