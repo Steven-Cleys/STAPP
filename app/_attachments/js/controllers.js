@@ -1,8 +1,8 @@
 var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
                                                   'ionic' ]);
 var myPopup;
-var qrcode; // = "b36";
-var qrcodes = []; // =["1x9","87t","4z7","s53","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
+var qrcode;
+var qrcodes = []; // = ["1x9","87t","4z7","s53","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
 var ok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var nok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var jsonarr = []; //array voor data bij te houden
@@ -11,7 +11,7 @@ var start; //voor routes
 var end;
 var startTime; // = 10000; //testing
 var endTime;
-var tracker;
+var tracker; //where am i
 var infowindows = [];
 var gpsinterval; // this var stores the gps update interval function
 
@@ -562,6 +562,9 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 	}
 
 	$scope.validate = function() {
+		qrcodes.push(qrcode);
+		localStorage['qrcodes'] = JSON.stringify(qrcodes); //storage the filled in question
+		
 		ok = JSON.parse(window.localStorage['questionOk']);
 		nok = JSON.parse(window.localStorage['questionNok']);
 		var answer = $scope.validate.answer;
@@ -640,7 +643,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 						text : 'Ok',
 						type : 'button-assertive',
 						onTap : function() {
-							$state.go('login');
+							$state.go('index');
 						}
 					} ]
 
@@ -653,8 +656,6 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 						text : 'OK',
 						type : 'button-assertive',
 						onTap : function() {
-							qrcodes.push(qrcode);
-							localStorage['qrcodes'] = JSON.stringify(qrcodes); //storage the filled in question
 							localStorage.setItem('qrcode', qrcode);
 							$state.go('index');
 						}
