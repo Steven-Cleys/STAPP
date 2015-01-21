@@ -120,7 +120,7 @@ myApp
 
 				$http
 				.jsonp(
-				'https://stapp.cloudant.com/ap/_design/views/_view/questions?callback=JSON_CALLBACK')
+				'https://stapp.cloudant.com/ap/_design/views/_view/questions?callback=JSON_CALLBACK') //load data from serer
 				.then(
 
 						function(resp) {
@@ -140,7 +140,7 @@ myApp
 			}
 
 
-			function initialize() {
+			function initialize() { //load map
 				directionsDisplay = new google.maps.DirectionsRenderer({polylineOptions: {
 					strokeColor: "red",
 					strokeOpacity:0.5,
@@ -381,49 +381,7 @@ myApp
 						});
 			};
 
-			// showspinner();
-			
-			
-
-			$scope.centerOnMe = function() {
-				console.log("centered?");
-				if (!$scope.map) {
-					console.log("return?");
-					return;
-				}
-
-
-				navigator.geolocation.getCurrentPosition(
-						function(pos) {
-							console.log("getting position")
-							$scope.map
-							.setCenter(new google.maps.LatLng(
-									pos.coords.latitude,
-									pos.coords.longitude));
-
-							var myLatlng = new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
-
-							tracker = new google.maps.Marker({
-								position: myLatlng,
-								map: $scope.map,
-								zIndex:1,
-								icon: 'img/icon/you-are-here-2.png'
-							});									
-
-							track(pos);
-						}, function(error) {
-							console.log('Unable to get location: '
-									+ error.message);
-						},
-						{
-							enableHighAccuracy: true,
-							timeout : 10000
-						}
-
-				);
-			};
-			
-			
+	
 			function setGeolocation() {
 				
 			    var geolocation = window.navigator.geolocation.watchPosition( 
@@ -465,50 +423,49 @@ myApp
 			    );
 			};
 
-			function track(location)
-			{
-				
-				
-				
-				
-				var newLatLng = new google.maps.LatLng(location.coords.latitude,location.coords.longitude);
-				console.log(newLatLng);
-				tracker.setPosition(newLatLng);
-
-				//navigator.geolocation.clearWatch(watchId);
-				console.log("location updated");
-			}
-
 			$scope.takePhoto = function(){
-				 var options = {
-					      quality: 75,
-					      destinationType: Camera.DestinationType.DATA_URL,
+				
+				var options = {
+					      destinationType: Camera.DestinationType.FILE_URI,
 					      sourceType: Camera.PictureSourceType.CAMERA,
-					      allowEdit: true,
-					      encodingType: Camera.EncodingType.JPEG,
-					      targetWidth: 500,
-					      targetHeight: 500,
-					      popoverOptions: CameraPopoverOptions,
-					      saveToPhotoAlbum: true
 					    };
 
-					    $cordovaCamera.getPicture(options).then(function(imageData) {
-					      //image = document.getElementById('myImage');
-					    	
-					      var image = "data:image/jpeg;base64," + imageData;
-					      localStorage.setItem('image', image);
-					      $scope.imageSrc = image;
-					      
-							setTimeout(function() {
-								$scope.openModal();
-							}, 200);
-					      //$http.post('https://stapp.cloudant.com/results', { test: imageData });
-						  //$state.go('login');
-					      
+					    $cordovaCamera.getPicture(options).then(function(imageURI) {
+					      //var image = document.getElementById('myImage');
+					      //image = imageURI;
 					    }, function(err) {
-					    	
+					      // error
 					    });
-			}
+					  }
+			
+//				 var options = {
+//					      quality: 75,
+//					      destinationType: Camera.DestinationType.FILE_URI,
+//					      sourceType: Camera.PictureSourceType.CAMERA,
+//					      allowEdit: true,
+//					      encodingType: Camera.EncodingType.JPEG,
+//					      targetWidth: 500,
+//					      targetHeight: 500,
+//					      popoverOptions: CameraPopoverOptions,
+//					      saveToPhotoAlbum: false
+//					    };
+//
+//					    $cordovaCamera.getPicture(options).then(function(imageURI) {
+					    	
+					      //var image = "data:image/jpeg;base64," + imageData;
+					      //localStorage.setItem('image', imageURI);
+//					      $scope.imageSrc = image;
+//					      
+//							setTimeout(function() {
+//								$scope.openModal();
+//							}, 200);
+					      //$http.post('https://stapp.cloudant.com/results', { test: imageURI });
+
+//					      
+//					    }, function(err) {
+//					    	
+//					    });
+			
 		});
 
 myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
