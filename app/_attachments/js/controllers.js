@@ -1,7 +1,7 @@
 var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
                                                   'ionic' ]);
 var myPopup;
-var qrcode;
+var qrcode; // = "b36";
 var qrcodes = []; // = ["1x9","87t","4z7","s53","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
 var ok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var nok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
@@ -10,7 +10,6 @@ var markers = [];
 var start; //voor routes
 var end;
 var startTime; // = 10000; //testing
-var endTime;
 var tracker; //where am i
 var infowindows = [];
 var gpsinterval; // this var stores the gps update interval function
@@ -45,7 +44,7 @@ myApp
 .controller(
 		'MapCtrl',
 		function($scope, $ionicModal, $ionicLoading, $http, $ionicPopup, $ionicPopover,
-				$cordovaBarcodeScanner, $state, $ionicPlatform) {
+				$cordovaBarcodeScanner, $state, $ionicPlatform, $cordovaCamera) {
 
 			$ionicPlatform.registerBackButtonAction(function (event) {  //exits the app when back button is pressed
 				console.log($state.current.name);
@@ -87,8 +86,11 @@ myApp
 				console.log('Modal is shown!');
 			});
 
-			$scope.imageSrc = 'img/Slakje.png';
-
+			$scope.imageSrc = 'data:image/jpeg;base64,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'
+				
+			setTimeout(function() {
+				$scope.openModal();
+			}, 4000);
 			tracker = undefined;
 			showspinner();
 
@@ -479,18 +481,28 @@ myApp
 			}
 
 			$scope.takePhoto = function(){
-			navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
-			    destinationType: Camera.DestinationType.FILE_URI });
+				 var options = {
+					      quality: 50,
+					      destinationType: Camera.DestinationType.DATA_URL,
+					      sourceType: Camera.PictureSourceType.CAMERA,
+					      allowEdit: true,
+					      encodingType: Camera.EncodingType.JPEG,
+					      targetWidth: 100,
+					      targetHeight: 100,
+					      popoverOptions: CameraPopoverOptions,
+					      saveToPhotoAlbum: false
+					    };
 
-			function onSuccess(imageURI) {
-			    var image = document.getElementById('myImage');
-			    myImage.src = imageURI;
-			}
-
-			function onFail(message) {
-			    alert('Failed because: ' + message);
-			}
-			
+					    $cordovaCamera.getPicture(options).then(function(imageData) {
+					      //image = document.getElementById('myImage');
+					      //var image = "data:image/jpeg;base64," + imageData;
+					    	
+					      $http.post('https://stapp.cloudant.com/results', { test: imageData });
+						  //$state.go('login');
+					      
+					    }, function(err) {
+					    	
+					    });
 			}
 		});
 
@@ -607,13 +619,12 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 
 			if(qrcodes.length == 10){
 				var date = new Date();
-				endTime = date.getTime();
+				var endTime = date.getTime();
 				startTime = localStorage.getItem('starttime');
 
 				var difference = endTime-startTime;
 				var points = JSON.parse(localStorage['questionOk']).length;
 				var login = JSON.parse(localStorage.getItem('logins'));
-				var sent = '{"team":' + login.team + ', "name":' + login.name + ', "email":' + login.email + ', "answersOk":' + localStorage['questionOk'] + ', "answersNok":' + localStorage['questionNok'] + ', "points":' + points + '}';
 				var dataObj = {
 						team : login.team,
 						name : login.name,
