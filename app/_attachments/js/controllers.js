@@ -111,10 +111,12 @@ myApp
 				case 1:
 					$scope.imageSrc = 'img/img1.png';
 					index++;
+					$scope.openModal();
 					break;
 				case 2:
 					$scope.imageSrc  = 'img/img2.png';
 					index++;
+					$scope.openModal();
 					break;
 				case 3:
 					$scope.imageSrc  = 'img/img3.png';
@@ -124,6 +126,7 @@ myApp
 					$scope.closeModal();
 					break;
 				case 5:
+					
 					$scope.imageSrc  = 'img/img4.png';
 					index++;
 					break;
@@ -138,7 +141,6 @@ myApp
 					$scope.closeModal();
 					break;
 				}
-				$scope.openModal();
 				
 			}
 			
@@ -426,22 +428,23 @@ myApp
 
 									if (found == false && i > 8) {
 										var alertPopup;
-										alertPopup = $ionicPopup
-										.alert({
-											title : 'Ongeldige QR-Code',
+										alertPopup = $ionicPopup.alert({
+											title : '<h3>Oh Ow!!</h3>',
+											template:  'Er werd geen QR-code gescand of de gescande QR-code is ongeldig.',
 											buttons : [ {
-												text : imageData.text,
-												type : 'button-assertive'
+												text : 'OK',
+												type : 'button button-assertive'
 											} ]
 										});
 									}
 								}
 							}else {
 								alertPopup = $ionicPopup.alert({
-									title : 'U heeft deze qrcode al gescand',
+									title : '<h3>Oeps!!</h3>',
+									template:'Deze QR-code werd al gescand.',
 									buttons : [ {
 										text : 'OK',
-										type : 'button-assertive'
+										type : 'button button-assertive'
 									} ]
 								});
 							}
@@ -684,7 +687,8 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 				});*/
 			}else{
 				alertPopup = $ionicPopup.alert({
-					title : 'U antwoord is opgeslagen!',
+					title : '<h3>Woopie!!!</h3>',
+					template:'Het antwoord is opgeslagen!'
 					buttons : [ {
 						text : 'OK',
 						type : 'button-assertive',
@@ -698,7 +702,8 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 		} else {
 			if (question.allAnswers != null) {
 				alertPopup = $ionicPopup.alert({
-					title : 'Gelieve een antwoord aan te duiden.',
+					title : '<h3>Oh Snap!!</h3>',
+					template: 'Gelieve een antwoord aan te duiden.',
 					buttons : [ {
 						text : 'OK',
 						type : 'button-assertive'
@@ -706,7 +711,8 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 				});
 			} else {
 				alertPopup = $ionicPopup.alert({
-					title : 'Gelieve een antwoord in te vullen.',
+					title : '<h3>Oh Snap!!</h3>',
+					template:'Gelieve een antwoord in te vullen.',
 					buttons : [ {
 						text : 'OK',
 						type : 'button-assertive'
@@ -765,8 +771,9 @@ myApp.controller('LoginCtrl', function($scope, $ionicPopup, $state, $ionicPlatfo
 			$scope.showAlert = function() {
 				var alertPopup = $ionicPopup.alert({
 					title: 'Woops',
+					template:'Controleer alle invoervelden aub.'
 					buttons : [ {
-						text : 'Controleer alle invoervelden aub',
+						text : 'OK',
 						type : 'button-assertive'
 					} ]
 				});
