@@ -38,6 +38,23 @@ function killBoxes() {
     }
 	}
 
+function convertImgToBase64URL(url, callback, outputFormat){
+    var canvas = document.createElement('CANVAS'),
+        ctx = canvas.getContext('2d'),
+        img = new Image;
+    img.crossOrigin = 'Anonymous';
+    img.onload = function(){
+        var dataURL;
+        canvas.height = img.height;
+        canvas.width = img.width;
+        ctx.drawImage(img, 0, 0);
+        dataURL = canvas.toDataURL(outputFormat);
+        callback.call(this, dataURL);
+        canvas = null; 
+    };
+    img.src = url;
+}
+
 
 
 myApp
@@ -425,50 +442,31 @@ myApp
 
 			$scope.takePhoto = function(){
 				
-				var options = {
-					      destinationType: Camera.DestinationType.FILE_URI,
-					      sourceType: Camera.PictureSourceType.CAMERA,
-					      targetWidth: 300,
-					      targetHeight: 300,
-					      quality: 50,
-					    };
+			    var options = {
+			    	      quality: 75,
+			    	      destinationType: Camera.DestinationType.FILE_URL,
+			    	      sourceType: Camera.PictureSourceType.CAMERA,
+			    	      allowEdit: true,
+			    	      encodingType: Camera.EncodingType.JPEG,
+			    	      targetWidth: 320,
+			    	      targetHeight: 320,
+			    	      popoverOptions: CameraPopoverOptions,
+			    	      saveToPhotoAlbum: true
+			    	    };
 
-					    $cordovaCamera.getPicture(options).then(function(imageURI) {
-					      //var image = document.getElementById('myImage');
-					      //image = imageURI;
-					    }, function(err) {
-					      // error
-					    });
+			    $cordovaCamera.getPicture(options).then(function(imageURI) {
+			        //var image = document.getElementById('myImage');
+			        //image.src = imageURI;
+			    	convertImgToBase64URL(imageURI, function(base64Img){
+			    		localStorage.setItem('image', base64Img);
+			    	});
+			    	
+			        
+			      }, function(err) {
+			        // error
+			      });
+
 					  }
-			
-//				 var options = {
-//					      quality: 75,
-//					      destinationType: Camera.DestinationType.FILE_URI,
-//					      sourceType: Camera.PictureSourceType.CAMERA,
-//					      allowEdit: true,
-//					      encodingType: Camera.EncodingType.JPEG,
-//					      targetWidth: 500,
-//					      targetHeight: 500,
-//					      popoverOptions: CameraPopoverOptions,
-//					      saveToPhotoAlbum: false
-//					    };
-//
-//					    $cordovaCamera.getPicture(options).then(function(imageURI) {
-					    	
-					      //var image = "data:image/jpeg;base64," + imageData;
-					      //localStorage.setItem('image', imageURI);
-//					      $scope.imageSrc = image;
-//					      
-//							setTimeout(function() {
-//								$scope.openModal();
-//							}, 200);
-					      //$http.post('https://stapp.cloudant.com/results', { test: imageURI });
-
-//					      
-//					    }, function(err) {
-//					    	
-//					    });
-			
 		});
 
 myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
