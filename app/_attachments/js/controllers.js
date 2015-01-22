@@ -1,7 +1,7 @@
 var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
                                                   'ionic' ]);
 var myPopup;
-var qrcode; // = "b36";
+var qrcode;
 var qrcodes = []; // = ["1x9","87t","4z7","s53","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
 var ok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var nok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
@@ -13,6 +13,7 @@ var startTime; // = 10000; //testing
 var tracker; //where am i
 var infowindows = [];
 var gpsinterval; // this var stores the gps update interval function
+var index =1;
 
 
 //localStorage.setItem('logins', 'amagad'); //to temporay disable logging screen for testing purposes.
@@ -20,22 +21,21 @@ var gpsinterval; // this var stores the gps update interval function
 function makeInfoWindowEvent(map, infowindow, marker) {
 
 	return function() {
-		
+
 		google.maps.event.addListener(infowindow, 'domready', function(){
 			console.log("infow loaded");
-		    $(".gm-style-iw").next("div").hide();
+			$(".gm-style-iw").next("div").hide();
 		});
 		killBoxes();
 		infowindow.open(map, marker);
-		
+
 	};
 }
 
 function killBoxes() {
 	console.log("kill da box");
-    for (var i = 0; i < infowindows.length; i++ ) { 
-    	infowindows[i].close();
-    }
+	for (var i = 0; i < infowindows.length; i++ ) { 
+		infowindows[i].close();
 	}
 
 function convertImgToBase64URL(url, callback, outputFormat){
@@ -55,7 +55,7 @@ function convertImgToBase64URL(url, callback, outputFormat){
     img.src = url;
 }
 
-
+}
 
 myApp
 .controller(
@@ -103,7 +103,49 @@ myApp
 				console.log('Modal is shown!');
 			});
 
-			$scope.imageSrc;
+			
+			$scope.showImage = function() {
+				
+				switch(index) {
+				case 1:
+					$scope.imageSrc = 'img/img1.png';
+					index++;
+					break;
+				case 2:
+					$scope.imageSrc  = 'img/img2.png';
+					index++;
+					break;
+				case 3:
+					$scope.imageSrc  = 'img/img3.png';
+					index++;
+					break;
+				case 4:
+					$scope.closeModal();
+					break;
+				case 5:
+					$scope.imageSrc  = 'img/img4.png';
+					index++;
+					break;
+				case 6:
+					$scope.closeModal();
+					index++;
+					break;
+				case 7:
+					$scope.imageSrc  = 'img/img5.png';
+					index++;
+					break;
+				case 8:
+					$scope.closeModal();
+					index++;
+					break;
+				}
+				$scope.openModal();
+				
+			}
+			
+			
+
+			//$scope.imageSrc;
 			//setTimeout(function() {
 			//	$scope.openModal();
 			//}, 4000);
@@ -115,7 +157,7 @@ myApp
 			// }
 			initialize();
 			progress();
-			
+
 			//probably not needed any more
 			if (localStorage.getItem('logins') != null) {
 				console.log(localStorage.getItem('logins'));
@@ -124,15 +166,18 @@ myApp
 				$state.go('login');
 			}
 
-			
+
 
 			function loadQuestions() {
 
-				if(localStorage['qrcodes'] == null){
+				if(localStorage['qrcodes'] == null){					
 					console.log("storage");
 					localStorage['qrcodes'] = JSON.stringify(qrcodes);
+					localStorage['firstrun'] = 'ja';
 					localStorage['questionOk'] = JSON.stringify(ok);
 					localStorage['questionNok'] = JSON.stringify(ok);
+					
+					
 				}
 
 				$http
@@ -209,7 +254,7 @@ myApp
 							+ spot.value.adres
 						});
 						infowindows.push(infowindow);
-						
+
 						console.log(spot.value.adres);
 						marker.setMap(map);
 						google.maps.event.addListener(marker, 'click',
@@ -218,11 +263,11 @@ myApp
 
 						markers.push(marker);
 					}
-					
+
 					google.maps.event.addListener(map, "click", function(event) {
 						killBoxes(); //kill info boxes
 					});
-					
+
 
 
 					$scope.map = map;
@@ -230,15 +275,23 @@ myApp
 					google.maps.event.addListenerOnce(map,
 							'tilesloaded', function() {
 						$ionicLoading.hide(); //hide spinner after loading
-
-						console.log("map loaded");
 						
+						if(localStorage['firstrun'] == 'ja'){
+							
+							$scope.showImage();
+							localStorage['firstrun'] = 'nee';
+							
+							
+						}
+						
+						console.log("map loaded");
+
 						setGeolocation();
 
 						gpsinterval = window.setInterval( function () {
-						        setGeolocation();
-						    }, 
-						    15000 //check gps every 15 seconds
+							setGeolocation();
+						}, 
+						15000 //check gps every 15 seconds
 						);
 
 					});
@@ -279,10 +332,13 @@ myApp
 
 
 			if (qrcode != null) {
-
+				
+				if(qrcode=="4z7"){
+					index=5;
+					setTimeout(function() {$scope.showImage();}, 4000);
+				}
 
 				if(qrcodes.length != 10)
-
 				{
 					for (i = 0; i < markers.length; i++) {
 						if(markers[i].id == qrcode){
@@ -307,11 +363,14 @@ myApp
 
 				}
 				else{
+					index=7;
+					setTimeout(function() {$scope.showImage();}, 4000);
+					
 					setTimeout(function() {
-					calcRoute(end,  new google.maps.LatLng(51.216126, 4.410546)); //directions to school
-					localStorage.clear(); //clear all localstorage game is done
-					qrcodes.length = 0;
-					console.log("clear me");
+						calcRoute(end,  new google.maps.LatLng(51.216126, 4.410546)); //directions to school
+						localStorage.clear(); //clear all localstorage game is done
+						qrcodes.length = 0;
+						console.log("clear me");
 					},100);
 				}
 
@@ -398,49 +457,50 @@ myApp
 						});
 			};
 
-	
+
 			function setGeolocation() {
-				
-			    var geolocation = window.navigator.geolocation.watchPosition( 
-			        function ( pos ) {
 
-			            
-						var myLatlng = new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
-			            
+				var geolocation = window.navigator.geolocation.watchPosition( 
+						function ( pos ) {
 
-											
-														            if (typeof tracker === 'undefined') {
-												tracker = new google.maps.Marker(
-														{
-															position : myLatlng,
-															map : $scope.map,
-															zIndex : 1,
-															icon : 'img/icon/you-are-here-2.png'
-														});
-												$scope.map.setCenter(myLatlng);
-												console.log("tracker created")
-											} else {
-												console.log("tracker updated " + myLatlng)
-												tracker.setPosition(myLatlng);
-											}
-			            
-	
-			            
-			        },
-			        function () { /* error */ }, {
-			            maximumAge: 250, 
-			            enableHighAccuracy: true
-			        } 
-			    );
 
-			    window.setTimeout( function () {
-			            window.navigator.geolocation.clearWatch( geolocation ) 
-			        }, 
-			        5000 //stop checking after 5 seconds
-			    );
+							var myLatlng = new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
+
+
+
+							if (typeof tracker === 'undefined') {
+								tracker = new google.maps.Marker(
+										{
+											position : myLatlng,
+											map : $scope.map,
+											zIndex : 1,
+											icon : 'img/icon/you-are-here-2.png'
+										});
+								$scope.map.setCenter(myLatlng);
+								console.log("tracker created")
+							} else {
+								console.log("tracker updated " + myLatlng)
+								tracker.setPosition(myLatlng);
+							}
+
+
+
+						},
+						function () { /* error */ }, {
+							maximumAge: 250, 
+							enableHighAccuracy: true
+						} 
+				);
+
+				window.setTimeout( function () {
+					window.navigator.geolocation.clearWatch( geolocation ) 
+				}, 
+				5000 //stop checking after 5 seconds
+				);
 			};
 
 			$scope.takePhoto = function(){
+
 				
 			    var options = {
 			    	      quality: 75,
@@ -467,10 +527,27 @@ myApp
 			      });
 
 					  }
+
+				var options = {
+						destinationType: Camera.DestinationType.FILE_URI,
+						sourceType: Camera.PictureSourceType.CAMERA,
+						targetWidth: 300,
+						targetHeight: 300,
+						quality: 50,
+				};
+
+				$cordovaCamera.getPicture(options).then(function(imageURI) {
+					//var image = document.getElementById('myImage');
+					//image = imageURI;
+				}, function(err) {
+					// error
+				});
+			}
+
 		});
 
 myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
-	
+
 	jsonarr = JSON.parse(localStorage['questions']);
 	var execute = true;
 	var valid = false;
@@ -539,7 +616,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 	$scope.validate = function() {
 		qrcodes.push(qrcode);
 		localStorage['qrcodes'] = JSON.stringify(qrcodes); //storage the filled in question
-		
+
 		ok = JSON.parse(window.localStorage['questionOk']);
 		nok = JSON.parse(window.localStorage['questionNok']);
 		var answer = $scope.validate.answer;
@@ -668,10 +745,10 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 })
 
 myApp.controller('LoginCtrl', function($scope, $ionicPopup, $state, $ionicPlatform) {
-	
-	
+
+
 	$ionicPlatform.registerBackButtonAction(function (event) {  //exits the app when back button is pressed
-		
+
 		ionic.Platform.exitApp();
 
 	}, 100);
@@ -689,14 +766,14 @@ myApp.controller('LoginCtrl', function($scope, $ionicPopup, $state, $ionicPlatfo
 	if (localStorage.getItem('logins') != null) {
 		console.log(localStorage.getItem('logins'));
 		if (localStorage.getItem('qrcode') != null)
-		qrcode = localStorage.getItem('qrcode'); //load qrcode to calculate route when app crashed/restarted
+			qrcode = localStorage.getItem('qrcode'); //load qrcode to calculate route when app crashed/restarted
 		if (localStorage.getItem('qrcodes') != null)
-		qrcodes = JSON.parse(localStorage['qrcodes']); //load qrcodes to calculate progress when app crashed/restarted
+			qrcodes = JSON.parse(localStorage['qrcodes']); //load qrcodes to calculate progress when app crashed/restarted
 		$state.go('index');
 	} else {
 		console.log("no login found");
 	}
-	
+
 	$scope.options = ['Nederlands','English']; 
 
 	// Perform the login action when the user submits the login form
