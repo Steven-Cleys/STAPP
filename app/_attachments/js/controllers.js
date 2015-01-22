@@ -66,13 +66,9 @@ myApp
 
 			$ionicPlatform.registerBackButtonAction(function (event) {  //exits the app when back button is pressed
 				console.log($state.current.name);
-				if($state.current.name=="index"){
 					clearInterval(gpsinterval);
 					ionic.Platform.exitApp();
-				}
-				else {
-					navigator.app.backHistory();
-				}
+
 			}, 100);
 
 
@@ -688,7 +684,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 			}else{
 				alertPopup = $ionicPopup.alert({
 					title : '<h3>Woopie!!!</h3>',
-					template:'Het antwoord is opgeslagen!'
+					template:'Het antwoord is opgeslagen!',
 					buttons : [ {
 						text : 'OK',
 						type : 'button-assertive',
@@ -771,7 +767,7 @@ myApp.controller('LoginCtrl', function($scope, $ionicPopup, $state, $ionicPlatfo
 			$scope.showAlert = function() {
 				var alertPopup = $ionicPopup.alert({
 					title: 'Woops',
-					template:'Controleer alle invoervelden aub.'
+					template:'Controleer alle invoervelden aub.',
 					buttons : [ {
 						text : 'OK',
 						type : 'button-assertive'
