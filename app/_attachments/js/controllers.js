@@ -128,7 +128,6 @@ myApp
 					break;
 				case 6:
 					$scope.closeModal();
-					index++;
 					break;
 				case 7:
 					$scope.imageSrc  = 'img/img5.png';
@@ -136,7 +135,6 @@ myApp
 					break;
 				case 8:
 					$scope.closeModal();
-					index++;
 					break;
 				}
 				$scope.openModal();
@@ -363,7 +361,7 @@ myApp
 
 				}
 				else{
-					index=7;
+					index=6;
 					setTimeout(function() {$scope.showImage();}, 4000);
 					
 					setTimeout(function() {
@@ -672,7 +670,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 
 				$http.post('https://stapp.cloudant.com/results', dataObj);
 
-				alertPopup = $ionicPopup.alert({
+				/*alertPopup = $ionicPopup.alert({
 					title : 'U heeft alle vragen beantwoord!',
 					buttons : [ {
 						text : 'Ok',
@@ -683,7 +681,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 					} ]
 
 
-				});
+				});*/
 			}else{
 				alertPopup = $ionicPopup.alert({
 					title : 'U antwoord is opgeslagen!',
