@@ -2,7 +2,7 @@ var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
                                                   'ionic' ]);
 var myPopup;
 var qrcode;
-var qrcodes = []; // = ["1x9","87t","4z7","s53","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
+var qrcodes = ["1x9","87t","4z7","s53","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
 var ok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var nok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var jsonarr = []; //array voor data bij te houden
@@ -404,6 +404,11 @@ myApp
 									execute = false;
 								}
 							}
+							
+							if($scope.progress == 10) //stop scanning qrcodes when you have 10
+								{
+								execute = false;
+								}
 
 							if (execute){
 								for (i = 0; i < jsonarr.length; i++) {
