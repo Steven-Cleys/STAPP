@@ -428,6 +428,9 @@ myApp
 				var options = {
 					      destinationType: Camera.DestinationType.FILE_URI,
 					      sourceType: Camera.PictureSourceType.CAMERA,
+					      targetWidth: 300,
+					      targetHeight: 300,
+					      quality: 50,
 					    };
 
 					    $cordovaCamera.getPicture(options).then(function(imageURI) {
