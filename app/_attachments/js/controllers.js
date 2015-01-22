@@ -66,13 +66,9 @@ myApp
 
 			$ionicPlatform.registerBackButtonAction(function (event) {  //exits the app when back button is pressed
 				console.log($state.current.name);
-				if($state.current.name=="index"){
 					clearInterval(gpsinterval);
 					ionic.Platform.exitApp();
-				}
-				else {
-					navigator.app.backHistory();
-				}
+
 			}, 100);
 
 
