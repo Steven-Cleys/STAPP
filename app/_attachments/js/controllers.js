@@ -688,7 +688,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 			}else{
 				alertPopup = $ionicPopup.alert({
 					title : '<h3>Woopie!!!</h3>',
-					template:'Het antwoord is opgeslagen!'
+					template:'Het antwoord is opgeslagen!',
 					buttons : [ {
 						text : 'OK',
 						type : 'button-assertive',
@@ -770,8 +770,8 @@ myApp.controller('LoginCtrl', function($scope, $ionicPopup, $state, $ionicPlatfo
 		{
 			$scope.showAlert = function() {
 				var alertPopup = $ionicPopup.alert({
-					title: 'Woops',
-					template:'Controleer alle invoervelden aub.'
+					title: '<h3>Woops!!</h3>',
+					template:'Controleer alle invoervelden aub.',
 					buttons : [ {
 						text : 'OK',
 						type : 'button-assertive'
