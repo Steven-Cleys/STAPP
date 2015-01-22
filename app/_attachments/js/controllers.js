@@ -1,8 +1,8 @@
 var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
                                                   'ionic' ]);
 var myPopup;
-var qrcode; //= 'b36'
-var qrcodes = []; // = ["1x9","87t","4z7","s53","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
+var qrcode;
+var qrcodes = []; // = ["1x9","87t","4z7","s53","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
 var ok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var nok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var jsonarr = []; //array voor data bij te houden
@@ -37,7 +37,8 @@ function killBoxes() {
 	for (var i = 0; i < infowindows.length; i++ ) { 
 		infowindows[i].close();
 	}
-
+}
+	
 function convertImgToBase64URL(url, callback, outputFormat){
     var canvas = document.createElement('CANVAS'),
         ctx = canvas.getContext('2d'),
@@ -55,7 +56,7 @@ function convertImgToBase64URL(url, callback, outputFormat){
     img.src = url;
 }
 
-}
+
 
 myApp
 .controller(
@@ -163,8 +164,6 @@ myApp
 				console.log("you shouldnt be here, go login first");
 				$state.go('login');
 			}
-
-
 
 			function loadQuestions() {
 
@@ -362,7 +361,7 @@ myApp
 				}
 				else{
 					index=6;
-					setTimeout(function() {$scope.showImage();}, 4000);
+					//setTimeout(function() {$scope.showImage();}, 4000);
 					
 					setTimeout(function() {
 						calcRoute(end,  new google.maps.LatLng(51.216126, 4.410546)); //directions to school
@@ -499,27 +498,27 @@ myApp
 
 				
 			    var options = {
-			    	      quality: 75,
+			    	      quality: 50,
 			    	      destinationType: Camera.DestinationType.FILE_URL,
 			    	      sourceType: Camera.PictureSourceType.CAMERA,
 			    	      allowEdit: true,
 			    	      encodingType: Camera.EncodingType.JPEG,
-//			    	      targetWidth: 320,
-//			    	      targetHeight: 320,
+			    	      //targetWidth: 320,
+			    	      //targetHeight: 320,
 			    	      popoverOptions: CameraPopoverOptions,
 			    	      saveToPhotoAlbum: true
 			    	    };
 
 			    $cordovaCamera.getPicture(options).then(function(imageURI) {
+			    	//alert('hallo');
 			        //var image = document.getElementById('myImage');
 			        //image.src = imageURI;
 			    	convertImgToBase64URL(imageURI, function(base64Img){
-			    		localStorage.setItem('image', base64Img);
+			    		localStorage.setItem('image', base64Img);		    		
 			    	});
-			    	
 			        
 			      }, function(err) {
-			        // error
+			        alert(err);
 			      });
 
 					  }
@@ -638,7 +637,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 			}
 
 			if(qrcodes.length == 10){
-				//alert(localStorage.getItem('image'));
+
 				var date = new Date();
 				var endTime = date.getTime();
 				startTime = localStorage.getItem('starttime');
@@ -669,6 +668,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 //				$http(req);
 
 				$http.post('https://stapp.cloudant.com/results', dataObj);
+				$state.go('index')
 
 				/*alertPopup = $ionicPopup.alert({
 					title : 'U heeft alle vragen beantwoord!',
