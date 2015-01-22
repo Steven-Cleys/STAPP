@@ -113,6 +113,7 @@
   height: 100%;
   top: 0 !important;
   left: 0 !important;
+  position: absolute !important;
 }
 .fullscreen-image {
   max-width: 100%;
@@ -121,9 +122,9 @@
   left: 0;
   margin: auto;
   overflow: auto;
-  position: fixed;
+  position: absolute;
   right: 0;
-  top: 0;
+  bottom: 0;
 }
 
 .nav-image{
