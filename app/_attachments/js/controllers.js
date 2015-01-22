@@ -1,7 +1,7 @@
 var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
                                                   'ionic' ]);
 var myPopup;
-var qrcode;
+var qrcode; //= 'b36'
 var qrcodes = []; // = ["1x9","87t","4z7","s53","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
 var ok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var nok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
@@ -466,8 +466,6 @@ myApp
 
 							var myLatlng = new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
 
-
-
 							if (typeof tracker === 'undefined') {
 								tracker = new google.maps.Marker(
 										{
@@ -508,8 +506,8 @@ myApp
 			    	      sourceType: Camera.PictureSourceType.CAMERA,
 			    	      allowEdit: true,
 			    	      encodingType: Camera.EncodingType.JPEG,
-			    	      targetWidth: 320,
-			    	      targetHeight: 320,
+//			    	      targetWidth: 320,
+//			    	      targetHeight: 320,
 			    	      popoverOptions: CameraPopoverOptions,
 			    	      saveToPhotoAlbum: true
 			    	    };
@@ -527,22 +525,6 @@ myApp
 			      });
 
 					  }
-
-				var options = {
-						destinationType: Camera.DestinationType.FILE_URI,
-						sourceType: Camera.PictureSourceType.CAMERA,
-						targetWidth: 300,
-						targetHeight: 300,
-						quality: 50,
-				};
-
-				$cordovaCamera.getPicture(options).then(function(imageURI) {
-					//var image = document.getElementById('myImage');
-					//image = imageURI;
-				}, function(err) {
-					// error
-				});
-			}
 
 		});
 
@@ -658,6 +640,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 			}
 
 			if(qrcodes.length == 10){
+				//alert(localStorage.getItem('image'));
 				var date = new Date();
 				var endTime = date.getTime();
 				startTime = localStorage.getItem('starttime');
