@@ -2,7 +2,7 @@ var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
                                                   'ionic' ]);
 var myPopup;
 var qrcode; // = 'b36';
-var qrcodes = []; //= ["1x9","87t","b36","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
+var qrcodes = [] // = ["1x9","87t","b36","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
 var ok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var nok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var jsonarr = []; //array voor data bij te houden
@@ -521,7 +521,7 @@ myApp
 			        //var image = document.getElementById('myImage');
 			        //image.src = imageURI;
 			    	convertImgToBase64URL(imageURI, function(base64Img){
-			    		localStorage.setItem('image', base64Img);		    		
+			    		localStorage.setItem('image', base64Img);	
 			    	});
 			        
 			      }, function(err) {
@@ -644,7 +644,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 			}
 
 			if(qrcodes.length == 10){
-
+				//alert(image);
 				var date = new Date();
 				var endTime = date.getTime();
 				startTime = localStorage.getItem('starttime');
@@ -675,6 +675,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 //				$http(req);
 
 				$http.post('https://stapp.cloudant.com/results', dataObj);
+				
 				$state.go('index')
 
 				/*alertPopup = $ionicPopup.alert({
