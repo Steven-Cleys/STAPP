@@ -1,8 +1,8 @@
 var myApp = angular.module('stapp.controllers', [ 'ui.router', 'ngCordova',
                                                   'ionic' ]);
 var myPopup;
-var qrcode;
-var qrcodes = ["1x9","87t","4z7","s53","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
+var qrcode; // = 'b36';
+var qrcodes = [] // = ["1x9","87t","b36","s5t","wr2","pqr","f63","4lc"]; //Dit wordt gebruikt bij de QuestionCtrl
 var ok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var nok = []; //Nodig voor de punten te bepalen bij QuestionCtrl
 var jsonarr = []; //array voor data bij te houden
@@ -65,11 +65,12 @@ myApp
 				$cordovaBarcodeScanner, $state, $ionicPlatform, $cordovaCamera) {
 
 			$ionicPlatform.registerBackButtonAction(function (event) {  //exits the app when back button is pressed
+				//alert('close');
 				console.log($state.current.name);
 					clearInterval(gpsinterval);
 					ionic.Platform.exitApp();
 
-			}, 100);
+			}, 10000);
 
 
 			$ionicModal.fromTemplateUrl('templates/image-modal.html', function($ionicModal) {
@@ -125,6 +126,7 @@ myApp
 					
 					$scope.imageSrc  = 'img/img4.png';
 					index++;
+					$scope.openModal();
 					break;
 				case 6:
 					$scope.closeModal();
@@ -132,6 +134,7 @@ myApp
 				case 7:
 					$scope.imageSrc  = 'img/img5.png';
 					index++;
+					$scope.openModal();
 					break;
 				case 8:
 					$scope.closeModal();
@@ -330,7 +333,7 @@ myApp
 				
 				if(qrcode=="4z7"){
 					index=5;
-					setTimeout(function() {$scope.showImage();}, 4000);
+					setTimeout(function() {$scope.showImage(); console.log("alloha")}, 400);
 				}
 
 				if(qrcodes.length != 10)
@@ -358,8 +361,8 @@ myApp
 
 				}
 				else{
-					index=6;
-					//setTimeout(function() {$scope.showImage();}, 4000);
+					index=7;
+					setTimeout(function() {$scope.showImage();}, 400);
 					
 					setTimeout(function() {
 						calcRoute(end,  new google.maps.LatLng(51.216126, 4.410546)); //directions to school
@@ -518,7 +521,7 @@ myApp
 			        //var image = document.getElementById('myImage');
 			        //image.src = imageURI;
 			    	convertImgToBase64URL(imageURI, function(base64Img){
-			    		localStorage.setItem('image', base64Img);		    		
+			    		localStorage.setItem('image', base64Img);	
 			    	});
 			        
 			      }, function(err) {
@@ -641,7 +644,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 			}
 
 			if(qrcodes.length == 10){
-
+				//alert(image);
 				var date = new Date();
 				var endTime = date.getTime();
 				startTime = localStorage.getItem('starttime');
@@ -672,6 +675,7 @@ myApp.controller('QuestionCtrl', function($scope, $ionicPopup, $state, $http) {
 //				$http(req);
 
 				$http.post('https://stapp.cloudant.com/results', dataObj);
+				
 				$state.go('index')
 
 				/*alertPopup = $ionicPopup.alert({
@@ -736,7 +740,7 @@ myApp.controller('LoginCtrl', function($scope, $ionicPopup, $state, $ionicPlatfo
 
 
 	$ionicPlatform.registerBackButtonAction(function (event) {  //exits the app when back button is pressed
-
+		//alert('exit at login');
 		ionic.Platform.exitApp();
 
 	}, 100);
