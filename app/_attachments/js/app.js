@@ -23,7 +23,6 @@ angular.module('stapp', ['ionic','stapp.controllers', 'ngCordova'])
   })
     .state('login', {
       url: "/login",
-      templateUrl: "templates/login.html",
-      controller: 'LoginCtrl'     
+      templateUrl: "templates/login.html", 
   })
 });

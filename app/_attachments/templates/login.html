@@ -1,9 +1,9 @@
 <div>
 	<ion-view title='<img src="img/APpy.png" class="nav-image"/>' hide-back-button="true">
-	<ion-content>
+
 	
 	<ion-nav-bar class="bar-dark"> </ion-nav-bar>
-	<form ng-submit="doLogin()">
+	<ion-content ng-controller="LoginCtrl">
 		<div class="list list-inset">
 			<br>
 			<label class="item item-input item-select">
@@ -27,10 +27,9 @@
 			<ion-checkbox ng-model="login.checked" class="checkbox-assertive"><h4>Ik accepteer de gebruikersvoorwaarden</h4></ion-checkbox>
 			<label>
 			<button class="button button-block button-assertive"
-				type="submit">Log in</button></label>
+				ng-click="doLogin()">Log in</button></label>
 			
 		</div>
-	</form>
 	</ion-content>
 	</ion-view>
 </div>
